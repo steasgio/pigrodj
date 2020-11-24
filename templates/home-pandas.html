@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PigroPlay</title>
+</head>
+<body>
+<h1>Runomatic</h1>
+
+{{dynamicText |safe}}
+<form  method="post">
+    {{ form.name.label }}
+    {{ form.name() }}
+    {{ form.example }}
+    {{ form.language }}
+    {{ form.team}}
+    {{ form.team2}}
+    {{ form.csrf_token }}
+    <input type="submit" />
+</form>
+{% for table in mytables %}
+<h2>{{ table['heading'] }}</h2>
+    {% with mytable=table['dataframe'] %}
+        {% include "_songtable.html" %}
+        <br/> And even simpler <br/>
+
+    {% endwith %}
+{% endfor %}
+</body>
+</html>
