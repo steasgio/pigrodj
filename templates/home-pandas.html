@@ -9,12 +9,8 @@
 
 {{dynamicText |safe}}
 <form  method="post">
-    {{ form.name.label }}
-    {{ form.name() }}
-    {{ form.example }}
-    {{ form.language }}
-    {{ form.team}}
-    {{ form.team2}}
+    {{ form.myLists}}
+
     {{ form.csrf_token }}
     <input type="submit" />
 </form>
