@@ -22,7 +22,20 @@
 					});
 
 		});
-    });
+
+
+        });
+
+
+    function myloadSongs(_list_id) {
+		    alert("oi");
+            $('#msgDiv').load('http://localhost:8000/playlistsongs', // url
+               { list_id: _list_id },    // data
+                  function(data, status, jqXGR) {  // callback function
+                                        alert('data loaded:'+data);
+                });
+                return "ok";
+        }
     </script>
     <!-- Bootstrap 5 CSS -->
 <link
@@ -98,17 +111,17 @@ crossorigin="anonymous"></script>
 
                         <a class="btn btn-primary" href="/playlistsongs?list_id={{subfield.data}}" role="button">Link</a>
                         <a class="btn btn-outline-info" href="/playlistsongs?list_id={{subfield.data}}" role="button">Link</a>
-                        <button type="button" class="btn btn-outline-info" >Info</button>
+                        <button type="button" class="btn btn-outline-info" onclick="myloadSongs('{{subfield.data}}');" data-bs-toggle="modal" data-bs-target="#exampleModal">Info</button>
                 <br/>
                   {% endfor %}
                --------laila---------home dj ---<br/>
-	<input type="button" id="loadBtn" value="Load Data" />
+
 
 
 
 
                 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" id="loadBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
   Launch demo modal
 </button>
 
