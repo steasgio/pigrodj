@@ -11,28 +11,12 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 	<script type="text/javascript">
-        $(document).ready(function () {
-
-		 $('#loadBtn').click(function(){
-
-			$('#msgDiv').load('http://localhost:8000/playlistsongs', // url
-					{ list_id: '5tKPypIFhGu892JZoZhub8' },    // data
-					function(data, status, jqXGR) {  // callback function
-							alert('data loaded:'+data);
-					});
-
-		});
-
-
-        });
-
 
     function myloadSongs(_list_id) {
-		    alert("oi");
             $('#msgDiv').load('http://localhost:8000/playlistsongs', // url
                { list_id: _list_id },    // data
                   function(data, status, jqXGR) {  // callback function
-                                        alert('data loaded:'+data);
+                                       // alert('data loaded:'+data);
                 });
                 return "ok";
         }
@@ -104,46 +88,36 @@ crossorigin="anonymous"></script>
             <form  method="post" >
                 {{ form.myLists}}
 
-                --------laila---------home dj ---<br/>
                   {% for subfield in form.myLists %}
                        {{subfield}}
-                        <a href="/playlistsongs?list_id={{subfield.data}}"> {{subfield.label}}</a>
+                        {{subfield.label}}
 
-                        <a class="btn btn-primary" href="/playlistsongs?list_id={{subfield.data}}" role="button">Link</a>
-                        <a class="btn btn-outline-info" href="/playlistsongs?list_id={{subfield.data}}" role="button">Link</a>
+
                         <button type="button" class="btn btn-outline-info" onclick="myloadSongs('{{subfield.data}}');" data-bs-toggle="modal" data-bs-target="#exampleModal">Info</button>
                 <br/>
                   {% endfor %}
-               --------laila---------home dj ---<br/>
 
 
-
-
-
-                <!-- Button trigger modal -->
-<button type="button" id="loadBtn" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Playlist detail</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="msgDiv">
-        ...
+        ...loading..
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+
       </div>
     </div>
   </div>
 </div>
-                --------laila---------home dj ---<br/>
+
 
                 {{ form.csrf_token }}
                 <input type="submit" />
