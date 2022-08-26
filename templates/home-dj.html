@@ -60,7 +60,19 @@ crossorigin="anonymous"></script>
           font-size: 3.5rem;
         }
       }
-    </style>
+
+      .modal-backdrop {
+           background-color: grey;
+      }
+      .modal-header{
+        background-color: darkgrey;
+        color: white;
+      }
+      .modal-body{
+        background-color: black;
+        color: white;
+      }
+            </style>
 
 
     <!-- Custom styles for this template -->
@@ -88,16 +100,29 @@ crossorigin="anonymous"></script>
             <form  method="post" >
                 {{ form.myLists}}
 
-                  {% for subfield in form.myLists %}
+
+
+  {% for subfield in form.myLists %}
+  <div class="row">
+    <div class="col">
                        {{subfield}}
                         {{subfield.label}}
+    </div>
+    <div class="col">
+            <button type="button" class="btn btn-outline-info" onclick="myloadSongs('{{subfield.data}}');" data-bs-toggle="modal" data-bs-target="#exampleModal">Info</button>
+
+    </div>
 
 
-                        <button type="button" class="btn btn-outline-info" onclick="myloadSongs('{{subfield.data}}');" data-bs-toggle="modal" data-bs-target="#exampleModal">Info</button>
-                <br/>
+</div>
+
+
+
+
+
                   {% endfor %}
 
-
+testt
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
