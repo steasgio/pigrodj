@@ -13,7 +13,7 @@
 	<script type="text/javascript">
 
     function myloadSongs(_list_id) {
-            $('#msgDiv').load('http://localhost:8000/playlistsongs', // url
+            $('#msgDiv').load('/playlistsongs', // url
                { list_id: _list_id },    // data
                   function(data, status, jqXGR) {  // callback function
                                        // alert('data loaded:'+data);
@@ -34,7 +34,7 @@ src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle
 integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
 crossorigin="anonymous"></script>
 
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
    <!-- Favicons -->
 <link rel="apple-touch-icon" href="https://getbootstrap.com/docs/5.0/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
 <link rel="icon" href="https://getbootstrap.com/docs/5.0/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
@@ -92,45 +92,46 @@ crossorigin="anonymous"></script>
       </nav>
     </div>
   </header>
+    <div class="container" >
 
 
-    <div class="container" align="left">
-
-      <div  style="margin-top: 5%">
+      <div  >
             <form  method="post" >
-
-
-
-  {% for subfield in form.myLists %}
   <div class="row">
-    <div class="col">
-                       {{subfield}}
-                        {{subfield.label}}
+    <div class="col-9">
+          {% for subfield in form.myLists %}
+          <div class="row">
+                <div  class="col-1">
+                  <i class="bi bi-music-note-list"></i>
+                  <!-- <img src="{{playListsDetails[subfield.data].image}}" alt="Playlist icon" width="50" height="50"> -->
+                </div>
+            <div  class="col-9" align="left">
+                               {{subfield}}
+                                {{subfield.label}}
+            </div>
+              <div  class="col-1">
+                  {{playListsDetails[subfield.data].numberOfTracks}}
+              </div>
 
+            <div  class="col-1">
+                    <a class="bi bi-three-dots" onclick="myloadSongs('{{subfield.data}}');" data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+                          {% endfor %}
     </div>
-      <div class="col">
-          {{playListsDetails[subfield.data].numberOfTracks}}
-      </div>
-      <div class="col">
+        <div class="col-3">
 
-          <img src="{{playListsDetails[subfield.data].image}}" alt="Playlist icon" width="50" height="50">
-      </div>
-    <div class="col">
-            <button type="button" class="btn btn-outline-info" onclick="myloadSongs('{{subfield.data}}');" data-bs-toggle="modal" data-bs-target="#exampleModal">Info</button>
-
-    </div>
-
-
-</div>
-
-
-
-
-
-                  {% endfor %}
-
-
-
+              <button type="submit" class="btn btn-primary">Mix</button>
+        </div>
+  </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -153,26 +154,16 @@ crossorigin="anonymous"></script>
 
                 {{ form.csrf_token }}
 
-                 <button type="submit" class="btn btn-primary">Mix</button>
             </form>
-             <div class="row">
-                    {% for table in mytables %}
-                    <h2>{{ table['heading'] }}</h2>
-                        {% with mytable=table['dataframe'] %}
-                            {% include "_songtable.html" %}
-                            <br/> Any more tables? <br/>
 
-                        {% endwith %}
-                    {% endfor %}
-             </div>
       </div>
+
 
   </div>
 
 
 
 </div>
-
 
 
 
