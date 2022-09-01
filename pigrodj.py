@@ -43,7 +43,10 @@ def buildPlaylist(strPlaylistName, strDestription, songslist, token):
             lPlaylist.append(uri)
 
         res=spotify.playlist_add(playlist_id, lPlaylist)
+        print("res="+res)
         if (res is not None):
+            print("res is not None")
+            print(playlist_id)
             return playlist_id
         else:
             print("error creating playlist")
@@ -105,8 +108,7 @@ def retrieveSongsIDNames(playlist_id,token):
 
         tracks=[]
         for t in pp.items:
-            tracks.append([t.track.id,t.track.name])
-
+            tracks.append([t.track.id,t.track.name,t.track.preview_url])
         return tracks
     except tk.BadRequest as ex:
         print("sssssss.........Bad request")
@@ -328,8 +330,9 @@ def app_factory() -> Flask:
 
 
 
+application = app_factory()
 
 if __name__ == '__main__':
-    application = app_factory()
 
     application.run(host="localhost", port=8000, debug=True)
+
