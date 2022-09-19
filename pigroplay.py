@@ -1,4 +1,4 @@
-#applicazione web richiede autenticazione su spotify e richiama api i cui risultati sono visualizzati in html
+# applicazione web richiede autenticazione su spotify e richiama api i cui risultati sono visualizzati in html
 
 import tekore as tk
 import pandas as pd
@@ -6,22 +6,25 @@ from flask import Flask, request, redirect, session
 from flask import render_template
 
 from wtforms import Form
-from wtforms import StringField, SubmitField, RadioField, SelectField, SelectMultipleField,widgets
-#from wtforms.validators import Required
+from wtforms import StringField, SubmitField, RadioField, SelectField, SelectMultipleField, widgets
+
+
+# from wtforms.validators import Required
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
 
+
 class T1Form(Form):
-    #name = StringField('What is your name?')
-    #example = RadioField('Label', choices=[('value', 'Falcao'), ('value_two', 'Cerezo')])
-    #team = SelectMultipleField("as roma",choices=[(1,'tancredi'),(2,'nela'),(3,'maldera')])
-    #team2 = MultiCheckboxField('Ita', choices=[(1,'zoff'),(2,'gentile'),(3,'cabrini')])
+    # name = StringField('What is your name?')
+    # example = RadioField('Label', choices=[('value', 'Falcao'), ('value_two', 'Cerezo')])
+    # team = SelectMultipleField("as roma",choices=[(1,'tancredi'),(2,'nela'),(3,'maldera')])
+    # team2 = MultiCheckboxField('Ita', choices=[(1,'zoff'),(2,'gentile'),(3,'cabrini')])
     myLists = MultiCheckboxField('Ita', choices=[(1, 'zoff'), (2, 'gentile'), (3, 'cabrini')])
 
-    #language = SelectField(u'Programming Language', choices=[('cpp', 'C++'), ('py', 'Python'), ('text', 'Plain Text')])
-    #submit = SubmitField('Submit')
+    # language = SelectField(u'Programming Language', choices=[('cpp', 'C++'), ('py', 'Python'), ('text', 'Plain Text')])
+    # submit = SubmitField('Submit')
 
 
 conf = tk.config_from_file("ppapp.cfg")
@@ -40,8 +43,7 @@ def app_factory() -> Flask:
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'aliens'
 
-
-    @app.route('/', methods=['GET','POST'])
+    @app.route('/', methods=['GET', 'POST'])
     def main():
 
         user = session.get('user', None)
@@ -57,17 +59,12 @@ def app_factory() -> Flask:
             token = cred.refresh(token)
             users[user] = token
         if request.method == 'POST':
-            print ("debugging 1")
-            #print (request.form)
-            #print ( request.form.get('name', request.args.get('name')))
-            #print("debugging 2")
+            print("debugging 1")
             myForm = T1Form(formdata=request.form)
-            print (myForm.myLists.data)
+            print(myForm.myLists.data)
             myForm.myLists.choices = myForm.myLists.data
-            #return render_template('home-pandas.html', dynamicText=dynamicText, mytables=showTables, form=myForm)
-            dynamicText= "Providing results"
-
-            return render_template('home-pandas.html', dynamicText=dynamicText,  form=myForm)
+            dynamicText = "Providing results:"
+            return render_template('results.html', dynamicText=dynamicText, l1Results=myForm.myLists.data)
         else:
             try:
                 '''
@@ -78,15 +75,14 @@ def app_factory() -> Flask:
                     page += f'<br>Now playing: {item}'
                 '''
 
-                dynamicText = ""
+                dynamicText = "Welcome"
                 playlists = df.groupby("playlist-name")["playlist-name"].count()
 
                 # dynamicText= dynamicText+ dfPlaylists.to_html(header="true", table_id="table", escape=False)
 
                 showTables = []
                 dfRunnable = df[(df.danceability > 0.5) & (df.energy > 0.5)]
-                dfRunnable.drop_duplicates(subset="id",inplace=True)
-
+                dfRunnable.drop_duplicates(subset="id", inplace=True)
 
                 dfRunnableTop = dfRunnable.sort_values(by=['energy'], inplace=False, ascending=False)
 
@@ -105,13 +101,13 @@ def app_factory() -> Flask:
                                        aggfunc='count')
                 '''
                 q = df.groupby(['playlist-name'])['playlist-name'].agg('count').to_frame('c').reset_index()
-                q.sort_values(by=['c'],ascending=False, inplace=True )
-                q['c']=q['playlist-name']+" "+q['c'].astype(str)
-                #pls.sort_values(ascending=False)
+                q.sort_values(by=['c'], ascending=False, inplace=True)
+                q['c'] = q['playlist-name'] + " " + q['c'].astype(str)
+                # pls.sort_values(ascending=False)
                 myForm.myLists.choices = q.values.tolist()
 
-                #myForm.team2.choices=dfRunnable[['playlist-name','playlist-name']].values.tolist()
-                #myForm.team2.choices=[(1,'oriali'),(2,'collovati')]
+                # myForm.team2.choices=dfRunnable[['playlist-name','playlist-name']].values.tolist()
+                # myForm.team2.choices=[(1,'oriali'),(2,'collovati')]
                 return render_template('home-pandas.html', dynamicText=dynamicText, mytables=showTables, form=myForm)
             except tk.HTTPError:
                 page += '<br>Error in retrieving now playing!'
@@ -149,13 +145,14 @@ def app_factory() -> Flask:
             users.pop(uid, None)
         return redirect('/', 307)
 
+
+
     return app
-
-
 
 
 if __name__ == '__main__':
     application = app_factory()
-    #application.run('localhost', 8000)
-    df = pd.read_csv("mysongs.csv")
+    # application.run('localhost', 8000)
+    # df = pd.read_csv("mysongs.csv")
+    df = pd.read_csv("dbgsongs.csv")
     application.run(host="localhost", port=8000, debug=True)

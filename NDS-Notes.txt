@@ -1,0 +1,9 @@
+Comandi per il deployment su gcloud
+
+PROJECT=pigrodj
+IMAGE=us-docker.pkg.dev/pigrodj/pigroregistry/pigroservice
+docker build . -t $IMAGE -f Dockerfile
+docker push $IMAGE
+gcloud run deploy pigrodj1 --image $IMAGE --allow-unauthenticated
+
+
