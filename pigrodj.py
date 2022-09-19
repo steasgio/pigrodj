@@ -77,8 +77,10 @@ def savePlaylistToSpotify(strPlaylistName, strDestription, songslist, token):
 			#logging.debug(uri)
 			lPlaylist.append(uri)
 
-
-		res = spotify.playlist_add(playlist_id, lPlaylist)
+		splittedPlay=split_list(lPlaylist,100)
+		res=[]
+		for subl in splittedPlay:
+			res = spotify.playlist_add(playlist_id, subl)
 
 
 		#logging.debug("res=" + res)
