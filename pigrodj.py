@@ -153,10 +153,12 @@ def retrieveAttributesOfSongsInAPlayslistFromSpotify(playlist_id, token):
 	tracks = []
 	try:
 		spotify = tk.Spotify(token)
-		pp = spotify.playlist_items(playlist_id)
-
+		#the following line retrieve the first 100 item
+		p = spotify.playlist_items(playlist_id)
+		#the following line paginates until the and (useful method of Tekore)
+		pp= spotify.all_items(p)
 		tracks = []
-		for t in pp.items:
+		for t in pp:
 			tracks.append([t.track.id, t.track.name, t.track.preview_url, t.track.duration_ms, t.track.popularity])
 		return tracks
 	except tk.BadRequest as ex:
