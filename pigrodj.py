@@ -365,8 +365,12 @@ def app_factory() -> Flask:
 		if user is not None and request.values['list_id'] is not None:
 			_songs = retrieveAttributesOfSongsInAPlayslistFromSpotify(request.values['list_id'], token)
 			logging.debug(_songs)
+			lengthOfPlaylist=0
+			for s in _songs:
+				lengthOfPlaylist=lengthOfPlaylist+s[3]
+			lengthOfPlaylist =lengthOfPlaylist//60000
 			return render_template('playlistsongs.html', dynamicText="eccoci" + "list_id=" + request.values['list_id'],
-								   l1Results=_songs)
+								   l1Results=_songs,lengthOfPlaylist=lengthOfPlaylist )
 		# return render_template('results.html', dynamicText="eccoci" + uid )
 		# return redirect('/', 307)
 
