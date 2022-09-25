@@ -105,7 +105,25 @@ def savePlaylistToSpotify(strPlaylistName, strDestription, songslist, token):
 		logging.error(ex.response)
 		return "Http error"
 
+def renameSpotifyPlaylist(playlist_id, playlist_newname,token):
+	try:
+		spotify = tk.Spotify(token)
+		spotify.playlist_change_details(playlist_id, playlist_newname)
+		#spotify.playlist_change_details(playlist_id:playlist_id,name:playlist_newname,description:aDescription)
+		return "ok"
+	except tk.BadRequest as ex:
+		logging.error("Bad request .. renaming playlist")
+		logging.error(str(ex))
+		logging.error(ex.request)
+		logging.error(ex.response)
+		return "ko"
 
+	except tk.HTTPError as ex:
+		logging.error("Http error renaming playlist")
+		logging.error(str(ex))
+		logging.error(ex.request)
+		logging.error(ex.response)
+		return "ko"
 def retrievePlaylistSongsFromSpotify(playlist_id, token):
 	''' retrieve from Spotify the songs contained in a specified playlist
 	Parameters:
@@ -213,7 +231,6 @@ def app_factory() -> Flask:
 	def main():
 		''' displays different templates: splash-dj.html if the user is not logged, home-dj.html when logged, playlist_created after a submit '''
 
-		logging.debug("++ test we are logging debug")
 		user = session.get('user', None)
 		token = users.get(user, None)
 
@@ -256,14 +273,25 @@ def app_factory() -> Flask:
 
 				return render_template('playlist_created.html', dynamicText="Playlist " + newPlaylistName + " mixed !",
 									   list_id=newPlaylistId)
-			elif request.form['submit_button'] == 'split':
+			elif request.form['submit_button'] == 'join':
+				''' concatenate two playlists '''
 				logging.debug("**** split called")
+				_playlistWData = []
+				for playlist_id in myplaylists:
+					songs = retrievePlaylistSongsFromSpotify(playlist_id, token)
+					_playlistWData= _playlistWData+songs
+				_mixedList = _playlistWData
+				newPlaylistName = "PigroDj"
+				newPlaylistId = savePlaylistToSpotify(newPlaylistName, "Playlist by PigroDJ", _mixedList, token)
 
+				return render_template('playlist_created.html', dynamicText="Playlist " + newPlaylistName + " joined !",
+									   list_id=newPlaylistId)
 			else:
 				logging.debug("**** submit button ="+request.form['submit_button'])
 
 		else:
 			try:
+				''' Home page after login'''
 				spotify = tk.Spotify(token)
 				username = spotify.current_user().display_name
 				userid = spotify.current_user().id
@@ -282,7 +310,9 @@ def app_factory() -> Flask:
 					_dictP = {
 						#"image": p.images[0].url,
 						"image":"",
-						"numberOfTracks": p.tracks.total
+						"numberOfTracks": p.tracks.total,
+						"name":p.name,
+						"id":p.id
 
 					}
 					_plists_details[p.id] = _dictP
@@ -369,11 +399,24 @@ def app_factory() -> Flask:
 			for s in _songs:
 				lengthOfPlaylist=lengthOfPlaylist+s[3]
 			lengthOfPlaylist =lengthOfPlaylist//60000
+			logging.debug("list_name"+request.values['list_name'])
 			return render_template('playlistsongs.html', dynamicText="eccoci" + "list_id=" + request.values['list_id'],
-								   l1Results=_songs,lengthOfPlaylist=lengthOfPlaylist )
+								   l1Results=_songs,lengthOfPlaylist=lengthOfPlaylist, list_name= request.values['list_name'], list_id=request.values['list_id'])
 		# return render_template('results.html', dynamicText="eccoci" + uid )
 		# return redirect('/', 307)
 
+	@app.route('/playlistrename', methods=['GET', 'POST'])
+	def playslistrename():
+		user = session.get('user', None)
+		token = users.get(user, None)
+		if user is not None and request.values['rename_list_id'] is not None and request.values['newPlaylistName'] is not None:
+			res=renameSpotifyPlaylist(request.values['rename_list_id'],request.values['newPlaylistName'],token)
+			if res=="ok":
+				return render_template('results.html', dynamicText="Playlist renamed to " + request.values['newPlaylistName']+ "  id="+request.values['rename_list_id'])
+			else:
+				return render_template('results.html', dynamicText="Error renaming playlist to " + request.values[
+					'newPlaylistName'] + "  id=" + request.values['rename_list_id'])
+#rename_list_id
 	# @app.route('/mix', methods=['GET', 'POST'])
 	def mix(request):
 		''' not used any more '''

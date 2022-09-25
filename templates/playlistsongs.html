@@ -1,11 +1,41 @@
+    <script type="text/javascript">
 
-Total length: {{lengthOfPlaylist}}'
-<div>Songs:</div>
+    function showRenameDialog(_list_id, _list_name) {
+       $('input[id="txtName"]').val('');
+       $('input[id="txtName"]').attr("placeholder",_list_name);
+       $('input[id="rename_list_id"]').val(_list_id);
+/*
+            $('#innerMsgDiv').load('/playlistsongs', // url
+               { list_id: _list_id,
+                 list_name: _list_name},    // data
+                  function(data, status, jqXGR) {  // callback function
+                                       // alert('data loaded:'+data);
+                });
+                return "ok";
+
+*/
+        }
+
+    </script>
+
+Playlist Name: {{list_name}}
+                                <a class="bi bi-three-dots" onclick="showRenameDialog('{{list_id}}','{{list_name}}');"
+                                   data-bs-toggle="modal" data-bs-target="#renameModal"> Rename</a>
+                                   <!-- <button type="submit" value="delete" class="btn btn-primary" name="submit_button">Delete</button> -->
+<br/><br/>
+
+Total length: {{lengthOfPlaylist}}' <br/>
+
+<br/>
+<button type="submit" value="split" class="btn btn-primary" name="submit_button">Split</button>
+
+
+<div>----------</div>
 
 {% for r in l1Results %}
    {{loop.index}}- {{ r[1] }}
 {% if r[2] is not none  %}
-<a href="{{ r[2] }}" class="text-decoration-none">
+<a href="{{ r[2] }}" class="text-decoration-none" target="_blank" >
 
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-note" viewBox="0 0 16 16">
                  <path d="M9 13c0 1.105-1.12 2-2.5 2S4 14.105 4 13s1.12-2 2.5-2 2.5.895 2.5 2z"></path>
@@ -13,11 +43,40 @@ Total length: {{lengthOfPlaylist}}'
                  <path d="M8 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 13 2.22V4L8 5V2.82z"></path>
                </svg>
 </a>
+
 {% endif %}
- {{ r[3]//60000 }}'  popularity {{ r[4] }}
+ {{ r[3]//60000 }}'
+    <!-- popularity {{ r[4] }} -->
 <br/>
 {% endfor %}
 
+<!-- Modal -->
+<div class="modal fade" id="renameModal" tabindex="-1" aria-labelledby="renameModalLabel"
+     aria-hidden="true">
+    <form action="playlistrename" method="post">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="renameModalLabel">Rename Playlist</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="renameMsgDiv">
+                Renamimg Playlist
+                <input type="text" id="txtName" name="newPlaylistName" class="form-control" placeholder="name" aria-label="Playlist" aria-describedby="basic-addon1" required>
+                <input type="hidden" id="rename_list_id" name="rename_list_id" value="test">
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" value="rename" class="btn btn-primary" name="submit_button">Rename</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+
+    </div>
+    </form>
+</div>
 
 
 

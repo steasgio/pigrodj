@@ -16,9 +16,10 @@
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script type="text/javascript">
 
-    function myloadSongs(_list_id) {
+    function myloadSongs(_list_id, _list_name) {
             $('#msgDiv').load('/playlistsongs', // url
-               { list_id: _list_id },    // data
+               { list_id: _list_id,
+                 list_name: _list_name},    // data
                   function(data, status, jqXGR) {  // callback function
                                        // alert('data loaded:'+data);
                 });
@@ -117,7 +118,7 @@
                             </div>
 
                             <div class="col-1">
-                                <a class="bi bi-three-dots" onclick="myloadSongs('{{subfield.data}}');"
+                                <a class="bi bi-three-dots" onclick="myloadSongs('{{subfield.data}}','{{playListsDetails[subfield.data].name}}');"
                                    data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
 
                             </div>
@@ -131,7 +132,7 @@
                     <div class="col-3">
 
                         <button type="submit" value="mix" class="btn btn-primary" name="submit_button">Mix</button>
-                        <button type="submit" value="split" class="btn btn-primary" name="submit_button">Split</button>
+                        <button type="submit" value="join" class="btn btn-primary" name="submit_button">Join</button>
                     </div>
                 </div>
                 <!-- Modal -->
