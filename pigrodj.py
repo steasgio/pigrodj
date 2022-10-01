@@ -124,6 +124,33 @@ def renameSpotifyPlaylist(playlist_id, playlist_newname,token):
 		logging.error(ex.request)
 		logging.error(ex.response)
 		return "ko"
+
+def deleteSpotifyPlaylist(playlist_id,token):
+	'''
+	Delete the specified playlist from spotifiy
+	:param playlist_id:
+	:param token:
+	:return: "Ok" if deleted, "ko" if removed
+
+	NB: Spotify api does not allow to delete an api but only to unfollow it (as other users might be following it ) .. so in principle you could recover it
+	'''
+	try:
+		spotify = tk.Spotify(token)
+		spotify.playlist_unfollow(playlist_id)
+		return "ok"
+	except tk.BadRequest as ex:
+		logging.error("Bad request .. deleting playlist")
+		logging.error(str(ex))
+		logging.error(ex.request)
+		logging.error(ex.response)
+		return "ko"
+
+	except tk.HTTPError as ex:
+		logging.error("Http error deleting playlist")
+		logging.error(str(ex))
+		logging.error(ex.request)
+		logging.error(ex.response)
+
 def retrievePlaylistSongsFromSpotify(playlist_id, token):
 	''' retrieve from Spotify the songs contained in a specified playlist
 	Parameters:
@@ -297,6 +324,8 @@ def app_factory() -> Flask:
 				userid = spotify.current_user().id
 				firstplaylists = spotify.playlists(userid)
 
+				# NOT WORKING : firstplaylists = spotify.followed_playlists(userid,20)
+
 				# for ct, p in enumerate(firstplaylists.items):
 				# 	logging.debug(ct, p.id, p.name)
 				# logging.debug("And now ..")
@@ -399,7 +428,7 @@ def app_factory() -> Flask:
 			for s in _songs:
 				lengthOfPlaylist=lengthOfPlaylist+s[3]
 			lengthOfPlaylist =lengthOfPlaylist//60000
-			logging.debug("list_name"+request.values['list_name'])
+			#logging.debug("list_name"+request.values['list_name'])
 			return render_template('playlistsongs.html', dynamicText="eccoci" + "list_id=" + request.values['list_id'],
 								   l1Results=_songs,lengthOfPlaylist=lengthOfPlaylist, list_name= request.values['list_name'], list_id=request.values['list_id'])
 		# return render_template('results.html', dynamicText="eccoci" + uid )
@@ -416,6 +445,25 @@ def app_factory() -> Flask:
 			else:
 				return render_template('results.html', dynamicText="Error renaming playlist to " + request.values[
 					'newPlaylistName'] + "  id=" + request.values['rename_list_id'])
+
+	@app.route('/playlistdelete', methods=['GET', 'POST'])
+	def playslistdelete():
+		user = session.get('user', None)
+		token = users.get(user, None)
+
+
+		return render_template('results.html',
+							   dynamicText="Playlist deleted " + request.values['deletePlaylistName'] + "  id=" +
+										   request.values['delete_list_id'])
+
+		if user is not None and request.values['delete_list_id'] is not None and request.values['deletePlaylistName'] is not None:
+			res=deleteSpotifyPlaylist(request.values['delete_list_id'],token)
+			if res=="ok":
+				return render_template('results.html', dynamicText="Playlist deleted:  " + request.values['deletePlaylistName']+ "  id="+request.values['delete_list_id'])
+			else:
+				return render_template('results.html', dynamicText="Error deleting playlist  " + request.values[
+					'deletePlaylistName'] + "  id=" + request.values['delete_list_id'])
+
 #rename_list_id
 	# @app.route('/mix', methods=['GET', 'POST'])
 	def mix(request):
