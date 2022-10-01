@@ -204,7 +204,14 @@ def retrieveAttributesOfSongsInAPlayslistFromSpotify(playlist_id, token):
 		pp= spotify.all_items(p)
 		tracks = []
 		for t in pp:
-			tracks.append([t.track.id, t.track.name, t.track.preview_url, t.track.duration_ms, t.track.popularity])
+			trackProperties={}
+			trackProperties["id"]=t.track.id
+			trackProperties["name"] = t.track.name
+			trackProperties["preview_url"] = t.track.preview_url
+			trackProperties["duration_ms"] = t.track.duration_ms
+			trackProperties["popularity"] = t.track.popularity
+			tracks.append(trackProperties)
+			#tracks.append([t.track.id, t.track.name, t.track.preview_url, t.track.duration_ms, t.track.popularity])
 		return tracks
 	except tk.BadRequest as ex:
 		logging.error("Bad request.. retrieving songs in playslist")
@@ -426,7 +433,7 @@ def app_factory() -> Flask:
 			logging.debug(_songs)
 			lengthOfPlaylist=0
 			for s in _songs:
-				lengthOfPlaylist=lengthOfPlaylist+s[3]
+				lengthOfPlaylist=lengthOfPlaylist+s["duration_ms"]
 			lengthOfPlaylist =lengthOfPlaylist//60000
 			#logging.debug("list_name"+request.values['list_name'])
 			return render_template('playlistsongs.html', dynamicText="eccoci" + "list_id=" + request.values['list_id'],
