@@ -12,6 +12,16 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 # from wtforms.validators import Required
 
+
+def stringifyArtists(artists):
+    tArtists = ""
+    for a in artists:
+        if (a.name is not None):
+            if (not tArtists):
+                tArtists=a.name
+            else:tArtists = tArtists+"-"+a.name
+    return tArtists
+
 def find_max_list(list):
 	''' returns the biggest item in a list'''
 	list_len = [len(i) for i in list]
@@ -204,12 +214,14 @@ def retrieveAttributesOfSongsInAPlayslistFromSpotify(playlist_id, token):
 		pp= spotify.all_items(p)
 		tracks = []
 		for t in pp:
+
 			trackProperties={}
 			trackProperties["id"]=t.track.id
 			trackProperties["name"] = t.track.name
 			trackProperties["preview_url"] = t.track.preview_url
 			trackProperties["duration_ms"] = t.track.duration_ms
 			trackProperties["popularity"] = t.track.popularity
+			trackProperties["artist"] = stringifyArtists(t.track.artists)
 			tracks.append(trackProperties)
 			#tracks.append([t.track.id, t.track.name, t.track.preview_url, t.track.duration_ms, t.track.popularity])
 		return tracks

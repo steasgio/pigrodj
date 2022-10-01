@@ -41,7 +41,7 @@ Total length: {{lengthOfPlaylist}}' <br/>
 <div>----------</div>
 
 {% for r in l1Results %}
-   {{loop.index}}- {{ r["name"] }}
+   {{loop.index}}- {{ r["artist"] }}:{{ r["name"] }}
 {% if r["preview_url"] is not none  %}
 <a href="{{ r['preview_url'] }}" class="text-decoration-none" target="_blank" >
 
