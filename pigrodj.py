@@ -233,9 +233,25 @@ def retrieveAttributesOfSongsInAPlayslistFromSpotify(playlist_id, token):
 		p = spotify.playlist_items(playlist_id)
 		#the following line paginates until the and (useful method of Tekore)
 		pp= spotify.all_items(p)
+
+		listOfId=[]
+		'''
+		pp2=pp.copy()
+		for t1 in pp2:
+			listOfId.append(t1.track.id)
+			print (t1.track.id)
+		'''
+		'''
+		f = spotify.tracks_audio_features(listOfId)
+		#features=spotify.all_items(f)
+		count=0
+		for ff in f:
+			count=count+1
+			print(count,ff.id)
+		'''
 		tracks = []
 		for t in pp:
-
+			listOfId.append(t.track.id)
 			trackProperties={}
 			trackProperties["id"]=t.track.id
 			trackProperties["name"] = t.track.name
@@ -245,6 +261,28 @@ def retrieveAttributesOfSongsInAPlayslistFromSpotify(playlist_id, token):
 			trackProperties["artist"] = stringifyArtists(t.track.artists)
 			tracks.append(trackProperties)
 			#tracks.append([t.track.id, t.track.name, t.track.preview_url, t.track.duration_ms, t.track.popularity])
+		subListsOfId=split_list(listOfId,100)
+		print(subListsOfId)
+		#count=0
+		features=[] #list of feature objects (one for each song)
+		for i in subListsOfId:
+			#count=count+1
+			f = spotify.tracks_audio_features(i)
+			features=features +f
+		#print(len(features))	#print(count, f)
+
+		for c in range(len(tracks)):
+			#print(tracks[c]["name"])
+			tracks[c]["danceability"] = features[c].danceability
+			tracks[c]["energy"] = features[c].energy
+			tracks[c]["acousticness"] = features[c].acousticness
+			tracks[c]["instrumentalness"] = features[c].instrumentalness
+			tracks[c]["liveness"] = features[c].liveness
+			tracks[c]["loudness"] = features[c].loudness
+			tracks[c]["speechiness"] = features[c].speechiness
+			tracks[c]["valence"] = features[c].valence
+			tracks[c]["tempo"] = features[c].tempo
+			tracks[c]["liveness"] = features[c].liveness
 		return tracks
 	except tk.BadRequest as ex:
 		logging.error("Bad request.. retrieving songs in playslist")

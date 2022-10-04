@@ -61,6 +61,9 @@
 
 {% endif %}
 {{ r["duration_ms"]//60000 }}'
+
+{{ r["danceability"]*100//1 }}+{{ r["energy"]*100//1 }} : {{(r["danceability"]+r["energy"])*100//2 }}
+
 <!-- popularity {{ r["poularity"] }} -->
 <br/>
 {% endfor %}
