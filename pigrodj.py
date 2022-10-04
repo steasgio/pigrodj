@@ -59,7 +59,28 @@ def mixListOfLists(lol):
 			if (ct < len(l)):
 				r.append(l[ct])
 	return r
-
+def splitPlaylistToSpotify(intPlaylistId,strPlaylistName, intMaxMinutes,  token ):
+	songsList=retrieveAttributesOfSongsInAPlayslistFromSpotify(intPlaylistId,token)
+	intMaxMinutes=intMaxMinutes*60000 #convert minutes in milliseconds
+	listLength=0
+	targetList=[]
+	listCounter=1
+	for s in songsList:
+		targetList.append(s["id"])
+		listLength=listLength+s["duration_ms"]
+		if listLength > intMaxMinutes:
+			savePlaylistToSpotify(strPlaylistName+"-"+str(listCounter),"by PigroDj",targetList,token)
+			logging.debug("writing "+ strPlaylistName+"-"+str(listCounter))
+			logging.debug(targetList)
+			listCounter=listCounter+1
+			targetList=[]
+			listLength=0
+	if len(targetList)>=1:
+		''' create the last sub-list altough below the target length'''
+		logging.debug("writing " + strPlaylistName + "-" + str(listCounter))
+		logging.debug(targetList)
+		savePlaylistToSpotify(strPlaylistName+"-"+str(listCounter),"by PigroDj",targetList,token)
+	return "ok"
 
 def savePlaylistToSpotify(strPlaylistName, strDestription, songslist, token):
 	''' writes a playslist in the Spotify account
@@ -321,7 +342,7 @@ def app_factory() -> Flask:
 									   list_id=newPlaylistId)
 			elif request.form['submit_button'] == 'join':
 				''' concatenate two playlists '''
-				logging.debug("**** split called")
+
 				_playlistWData = []
 				for playlist_id in myplaylists:
 					songs = retrievePlaylistSongsFromSpotify(playlist_id, token)
@@ -464,6 +485,28 @@ def app_factory() -> Flask:
 			else:
 				return render_template('results.html', dynamicText="Error renaming playlist to " + request.values[
 					'newPlaylistName'] + "  id=" + request.values['rename_list_id'])
+
+	@app.route('/playlistsplit', methods=['GET', 'POST'])
+	def playslistsplit():
+		user = session.get('user', None)
+		token = users.get(user, None)
+		if user is not None and request.values['split_list_id'] is not None and request.values['maxMinutes'] is not None:
+
+			res=splitPlaylistToSpotify(request.values['split_list_id'],request.values['split_list_name'],int(request.values['maxMinutes']),  token )
+			if res=="ok":
+				return render_template('results.html',
+									   dynamicText="Playlist successfully split in sublists with max  length of  " +request.values['maxMinutes'] + " minutes")
+			else:
+				return render_template('results.html',
+									   dynamicText="Error splitting " + request.values[
+										   'split_list_id'] + "  minutes=" +
+												   request.values['maxMinutes'])
+#			res=renameSpotifyPlaylist(request.values['rename_list_id'],request.values['newPlaylistName'],token)
+#			if res=="ok":
+#				return render_template('results.html', dynamicText="Playlist renamed to " + request.values['newPlaylistName']+ "  id="+request.values['rename_list_id'])
+#			else:
+#				return render_template('results.html', dynamicText="Error renaming playlist to " + request.values[
+#					'newPlaylistName'] + "  id=" + request.values['rename_list_id'])
 
 	@app.route('/playlistdelete', methods=['GET', 'POST'])
 	def playslistdelete():
