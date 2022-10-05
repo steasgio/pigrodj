@@ -147,18 +147,16 @@ function numberToColorRgb(i) {
 {% endif %}
 {{ r["duration_ms"]//60000 }}'
 
-{{ r["danceability"]*100//1 }}+{{ r["energy"]*100//1 }} : {{(r["danceability"]+r["energy"])*100//2 }}
 
 
 
-<i class="bi bi-disc " style='color:rgb({{(100-r["danceability"]+r["energy"])*100//2 }}%,{{(r["danceability"]+r["energy"])*100//2 }}%,0%)'></i>
-<!-- popularity {{ r["poularity"] }} -->
-<span id="colorFunToRun{{loop.index}}">test</span>
-<script>document.getElementById("colorFunToRun{{loop.index}}").innerHTML = '<span style="background-color:'+ numberToColorHsl({{(r["danceability"]+r["energy"])*100//2 }}) + '">test</span>';</script>
+<!-- option3 color the disk using js and HSL range -->
+<i   id="colorFunToRun2{{loop.index}}"></i>
+<script>document.getElementById("colorFunToRun2{{loop.index}}").innerHTML = '<i class="bi bi-disc" style="color:'+ numberToColorHsl({{(r["danceability"]+r["energy"])*100//2 }}) + '" data-toggle="tooltip" data-placement="right" title=" Fun To Run:{{(r["danceability"]+r["energy"])*100//2 }}"></i>';</script>
+
 <br/>
-<span id="colorFunToRun2{{loop.index}}">test2</span>
-<script>document.getElementById("colorFunToRun2{{loop.index}}").innerHTML = '<span style="background-color:'+ numberToColorRgb({{(r["danceability"]+r["energy"])*100//2 }}) + '">test</span>';</script>
-<br/>
+
+
 
 {% endfor %}
 
