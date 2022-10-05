@@ -33,17 +33,51 @@
     </div>
     <div class="col-3">
 
-        <a class="bi bi-three-dots" onclick="showRenameDialog('{{list_id}}','{{list_name}}');"
+        <a class="bi bi-card-text"" onclick="showRenameDialog('{{list_id}}','{{list_name}}');"
            data-bs-toggle="modal" data-bs-target="#renameModal"> Rename</a>
-
-        <a class="bi bi-three-dots" onclick="showSplitDialog('{{list_id}}','{{list_name}}');"
+        <br/>
+        <a class="bi-arrows-angle-expand" onclick="showSplitDialog('{{list_id}}','{{list_name}}');"
            data-bs-toggle="modal" data-bs-target="#splitModal"> Split</a>
+        <br/>
 
-        <a class="bi bi-three-dots" onclick="showDeleteDialog('{{list_id}}','{{list_name}}');"
+        <a class="bi bi-trash" onclick="showDeleteDialog('{{list_id}}','{{list_name}}');"
            data-bs-toggle="modal" data-bs-target="#deleteModal"> Delete</a>
+        <br/>
         <!-- <button type="submit" value="delete" class="btn btn-primary" name="submit_button">Delete</button> -->
     </div>
 </div>
+
+<i class="bi bi-funnel"></i>
+
+<i class="bi bi-battery"></i>
+<i class="bi bi-battery-half"></i>
+<i class="bi bi-battery-full"></i>
+
+<i class="bi bi-cassette"></i>
+<i class="bi bi-music-player"></i>
+
+
+<i class="bi bi-clipboard2-data"></i>
+<i class="bi bi-clipboard-pulse"></i>
+<i class="bi bi-dribbble"></i>
+<i class="bi bi-ev-station"></i>
+<i class="bi bi-filter"></i>
+<i class="bi bi-filter-circle"></i>
+<i class="bi bi-intersect"></i>
+<i class="bi bi-optical-audio"></i>
+<i class="bi bi-robot"></i>
+<i class="bi bi-search"></i>
+<i class="bi bi-scissors"></i>
+<i class="bi bi-sort-down"></i>
+<i class="bi bi-sort-down-alt"></i>
+<i class="bi bi-speaker"></i>
+<i class="bi bi-spotify"></i>
+<i class="bi bi-stack"></i>
+<i class="bi bi-star"></i>
+<i class="bi bi-stopwatch"></i>
+<i class="bi bi-thermometer"></i>
+<i class="bi bi-trophy"></i>
+
 <div>----------</div>
 
 {% for r in l1Results %}
@@ -63,7 +97,7 @@
 {{ r["duration_ms"]//60000 }}'
 
 {{ r["danceability"]*100//1 }}+{{ r["energy"]*100//1 }} : {{(r["danceability"]+r["energy"])*100//2 }}
-
+<i class="bi bi-disc " style="color:rgb(0%,{{(r["danceability"]+r["energy"])*100//2 }}%,0%)"></i>
 <!-- popularity {{ r["poularity"] }} -->
 <br/>
 {% endfor %}
