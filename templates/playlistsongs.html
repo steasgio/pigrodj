@@ -15,7 +15,10 @@
          $('input[id="idShowingPlaylistNameToDelete"]').val(_list_name);
          $('input[id="idNamePlaylistToDelete"]').val(_list_name);
     }
+    function showPreviewDialog(_url) {
+        document.getElementById("previewDiv").innerHTML= "<iframe src='"+_url+"'></iframe>";
 
+    }
     /** http://jsfiddle.net/rE6Rk/1/ **/
 
 function hslToRgb(h, s, l){
@@ -133,16 +136,10 @@ function numberToColorRgb(i) {
 
 {% for r in l1Results %}
 {{loop.index}}- <span class="text-primary">{{ r["artist"] }}:</span>{{ r["name"] }}
+        <br/>
 {% if r["preview_url"] is not none  %}
-<a href="{{ r['preview_url'] }}" class="text-decoration-none" target="_blank">
-
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-music-note"
-         viewBox="0 0 16 16">
-        <path d="M9 13c0 1.105-1.12 2-2.5 2S4 14.105 4 13s1.12-2 2.5-2 2.5.895 2.5 2z"></path>
-        <path fill-rule="evenodd" d="M9 3v10H8V3h1z"></path>
-        <path d="M8 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 13 2.22V4L8 5V2.82z"></path>
-    </svg>
-</a>
+        <a class="bi bi-music-note" onclick="showPreviewDialog('{{ r['preview_url'] }}');"
+           data-bs-toggle="modal" data-bs-target="#previewModal" data-bs-toggle="tooltip"  title="Listen to song preview"></a>
 
 {% endif %}
 {{ r["duration_ms"]//60000 }}'
@@ -274,7 +271,18 @@ function numberToColorRgb(i) {
     </form>
 </div>
 
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel"
+     aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" id="previewDiv">
+                    <iframe src="" title="preview" id="previewFrame"></iframe>
+                </div>
 
+            </div>
+
+        </div>
+</div>
 
 
 
