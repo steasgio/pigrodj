@@ -101,37 +101,27 @@ function numberToColorRgb(i) {
     </div>
 </div>
 
-<i class="bi bi-funnel"></i>
+<div name="funtorunbox" align="right">
+    <i class="bi bi-funnel"></i> Filter fun-to-run only <br/>
+     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up-arrow" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/>
+    </svg>
 
-<i class="bi bi-battery"></i>
-<i class="bi bi-battery-half"></i>
-<i class="bi bi-battery-full"></i>
+    Climax: start slow ..and increase speed<i class="bi bi-sort-down-alt" data-bs-toggle="tooltip"  title="Sort by fun-to-run last"></i>
+    <br/>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-down-arrow" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 11.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-1 0v2.6l-3.613-4.417a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61L13.445 11H10.5a.5.5 0 0 0-.5.5Z"/>
+    </svg>
+    Cool down: Start fast ..and slow down <i class="bi bi-sort-down" data-bs-toggle="tooltip"  title="Sort by fun-to-run first"> </i>
+    <br/>
+    <i class="bi bi-arrow-down-up"></i>Fartlek: Alternate Fast and slow
+    <br/>
 
-<i class="bi bi-cassette"></i>
-<i class="bi bi-music-player"></i>
-
-
-<i class="bi bi-clipboard2-data"></i>
-<i class="bi bi-clipboard-pulse"></i>
-<i class="bi bi-dribbble"></i>
-<i class="bi bi-ev-station"></i>
-<i class="bi bi-filter"></i>
-<i class="bi bi-filter-circle"></i>
-<i class="bi bi-intersect"></i>
-<i class="bi bi-optical-audio"></i>
-<i class="bi bi-robot"></i>
-<i class="bi bi-search"></i>
-<i class="bi bi-scissors"></i>
-<i class="bi bi-sort-down"></i>
-<i class="bi bi-sort-down-alt"></i>
-<i class="bi bi-speaker"></i>
-<i class="bi bi-spotify"></i>
-<i class="bi bi-stack"></i>
-<i class="bi bi-star"></i>
-<i class="bi bi-stopwatch"></i>
-<i class="bi bi-thermometer"></i>
-<i class="bi bi-trophy"></i>
-
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rainbow" viewBox="0 0 16 16">
+      <path d="M8 4.5a7 7 0 0 0-7 7 .5.5 0 0 1-1 0 8 8 0 1 1 16 0 .5.5 0 0 1-1 0 7 7 0 0 0-7-7zm0 2a5 5 0 0 0-5 5 .5.5 0 0 1-1 0 6 6 0 1 1 12 0 .5.5 0 0 1-1 0 5 5 0 0 0-5-5zm0 2a3 3 0 0 0-3 3 .5.5 0 0 1-1 0 4 4 0 1 1 8 0 .5.5 0 0 1-1 0 3 3 0 0 0-3-3zm0 2a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 4 0 .5.5 0 0 1-1 0 1 1 0 0 0-1-1z"/>
+    </svg>
+    The arch: slow-fast-slow
+</div>
 <div>----------</div>
 
 {% for r in l1Results %}
@@ -142,7 +132,7 @@ function numberToColorRgb(i) {
            data-bs-toggle="modal" data-bs-target="#previewModal" data-bs-toggle="tooltip"  title="Listen to song preview"></a>
 
 {% endif %}
-{{ r["duration_ms"]//60000 }}'
+
 
 
 
@@ -150,7 +140,9 @@ function numberToColorRgb(i) {
 <!-- option3 color the disk using js and HSL range -->
 <i   id="colorFunToRun2{{loop.index}}"></i>
 <script>document.getElementById("colorFunToRun2{{loop.index}}").innerHTML = '<i class="bi bi-disc" style="color:'+ numberToColorHsl({{(r["danceability"]+r["energy"])*100//2 }}) + '" data-toggle="tooltip" data-placement="right" title=" Fun To Run:{{(r["danceability"]+r["energy"])*100//2 }}"></i>';</script>
-
+fun-2-run:[{{(r["danceability"]+r["energy"])*100//2 }}]
+Tempo:[{{(r["tempo"]|int)}}]
+{{ r["duration_ms"]//60000 }}'
 <br/>
 
 
