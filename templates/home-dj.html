@@ -25,6 +25,7 @@
                 return "ok";
         }
 
+
     </script>
     <!-- Bootstrap 5 CSS -->
     <link
@@ -107,7 +108,7 @@
                 <div class="row">
                     <div class="col-9">
                         {% for subfield in form.myLists %}
-                        <div class="row">
+                        <div class="row" >
                             <div class="col-1">
                                 <i class="bi bi-music-note-list"></i>
                                 <!-- <img src="{{playListsDetails[subfield.data].image}}" alt="Playlist icon" width="50" height="50"> -->
@@ -116,7 +117,7 @@
                                 {{subfield}}
                                 {{subfield.label}}
                             </div>
-                            <div class="col-1">
+                            <div class="col-1" style="background-color:{{playListsDetails[subfield.data].color4numberOfTracks}}">
                                 {{playListsDetails[subfield.data].numberOfTracks}}
                             </div>
 
@@ -134,8 +135,9 @@
                     </div>
                     <div class="col-3">
 
-                        <button type="submit" value="mix" class="btn btn-primary" name="submit_button">Mix <i class="bi bi-arrows-angle-contract"></i></button>
-                        <button type="submit" value="join" class="btn btn-primary" name="submit_button">Join<i class="bi bi-arrows-collapse"></i></button>
+                        <button type="submit" value="mix" class="btn btn-primary" name="submit_button"> <i class="bi bi-arrows-angle-contract"></i> Mix</button>
+                        <br/> <br/>
+                        <button type="submit" value="join" class="btn btn-primary" name="submit_button"><i class="bi bi-arrows-collapse"></i> Join</button>
 
                     </div>
                 </div>

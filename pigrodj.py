@@ -8,10 +8,16 @@ from flask import render_template
 from wtforms import Form
 from wtforms import StringField, SubmitField, RadioField, SelectField, SelectMultipleField, widgets
 import logging
+import math
 
 logging.basicConfig(level=logging.DEBUG)
 # from wtforms.validators import Required
 
+def numberToColorRgb(i):
+	red = math.floor(255 - (255 * i / 100))
+	green = math.floor(255 * i / 100)
+	blue = 255
+	return f'rgb({red},{green},{blue})'
 
 def stringifyArtists(artists):
     tArtists = ""
@@ -81,6 +87,24 @@ def splitPlaylistToSpotify(intPlaylistId,strPlaylistName, intMaxMinutes,  token 
 		logging.debug(targetList)
 		savePlaylistToSpotify(strPlaylistName+"-"+str(listCounter),"by PigroDj",targetList,token)
 	return "ok"
+
+def cutPlaylistToSpotify(intPlaylistId,strPlaylistName, intMaxMinutes,  token ):
+	songsList=retrieveAttributesOfSongsInAPlayslistFromSpotify(intPlaylistId,token)
+	intMaxMinutes=intMaxMinutes*60000 #convert minutes in milliseconds
+	listLength=0
+	targetList=[]
+
+	for s in songsList:
+		targetList.append(s["id"])
+		listLength=listLength+s["duration_ms"]
+		if listLength > intMaxMinutes:
+			savePlaylistToSpotify(strPlaylistName+"-"+str(intMaxMinutes//60000),"by PigroDj",targetList,token)
+			logging.debug("writing "+ strPlaylistName+"-"+str(intMaxMinutes//60000))
+			logging.debug(targetList)
+			break
+
+	return "ok"
+
 
 def savePlaylistToSpotify(strPlaylistName, strDestription, songslist, token):
 	''' writes a playslist in the Spotify account
@@ -332,6 +356,8 @@ def app_factory() -> Flask:
 	app = Flask(__name__)
 	app.config['SECRET_KEY'] = 'aliens'
 
+
+
 	@app.route('/', methods=['GET', 'POST'])
 	def main():
 		''' displays different templates: splash-dj.html if the user is not logged, home-dj.html when logged, playlist_created after a submit '''
@@ -419,7 +445,8 @@ def app_factory() -> Flask:
 						"image":"",
 						"numberOfTracks": p.tracks.total,
 						"name":p.name,
-						"id":p.id
+						"id":p.id,
+						"color4numberOfTracks":numberToColorRgb(p.tracks.total)
 
 					}
 					_plists_details[p.id] = _dictP
@@ -508,7 +535,7 @@ def app_factory() -> Flask:
 			lengthOfPlaylist =lengthOfPlaylist//60000
 			#logging.debug("list_name"+request.values['list_name'])
 			return render_template('playlistsongs.html', dynamicText="eccoci" + "list_id=" + request.values['list_id'],
-								   l1Results=_songs,lengthOfPlaylist=lengthOfPlaylist, list_name= request.values['list_name'], list_id=request.values['list_id'])
+								   l1Results=_songs,lengthOfPlaylist=lengthOfPlaylist, list_name= request.values['list_name'], list_id=request.values['list_id'], fNumberToColorRgb=numberToColorRgb)
 		# return render_template('results.html', dynamicText="eccoci" + uid )
 		# return redirect('/', 307)
 
@@ -546,16 +573,32 @@ def app_factory() -> Flask:
 #				return render_template('results.html', dynamicText="Error renaming playlist to " + request.values[
 #					'newPlaylistName'] + "  id=" + request.values['rename_list_id'])
 
+
+	@app.route('/playlistcut', methods=['GET', 'POST'])
+	def playslistcut():
+		user = session.get('user', None)
+		token = users.get(user, None)
+		if user is not None and request.values['cut_list_id'] is not None and request.values['maxMinutes'] is not None:
+
+			res=cutPlaylistToSpotify(request.values['cut_list_id'],request.values['cut_list_name'],int(request.values['maxMinutes']),  token )
+			if res=="ok":
+				return render_template('results.html',
+									   dynamicText="Playlist successfully cut in sublists with max  length of  " +request.values['maxMinutes'] + " minutes")
+			else:
+				return render_template('results.html',
+									   dynamicText="Error cutting " + request.values[
+										   'cut_list_id'] + "  minutes=" +
+												   request.values['maxMinutes'])
+
 	@app.route('/playlistdelete', methods=['GET', 'POST'])
 	def playslistdelete():
 		user = session.get('user', None)
 		token = users.get(user, None)
-
-
+		'''
 		return render_template('results.html',
 							   dynamicText="Playlist deleted " + request.values['deletePlaylistName'] + "  id=" +
 										   request.values['delete_list_id'])
-
+		'''
 		if user is not None and request.values['delete_list_id'] is not None and request.values['deletePlaylistName'] is not None:
 			res=deleteSpotifyPlaylist(request.values['delete_list_id'],token)
 			if res=="ok":

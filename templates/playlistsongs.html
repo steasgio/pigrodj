@@ -10,6 +10,10 @@
         $('input[id="split_list_id"]').val(_list_id);
          $('input[id="idNamePlaylistToSplit"]').val(_list_name);
     }
+    function showCutDialog(_list_id, _list_name) {
+        $('input[id="cut_list_id"]').val(_list_id);
+         $('input[id="idNamePlaylistToCut"]').val(_list_name);
+    }
     function showDeleteDialog(_list_id, _list_name) {
          $('input[id="idPlaylistToDelete"]').val(_list_id);
          $('input[id="idShowingPlaylistNameToDelete"]').val(_list_name);
@@ -69,9 +73,10 @@ function numberToColorRgb(i) {
 
 
 
+
 </script>
 <div class="row">
-    <div class="col-9">
+    <div class="col-6">
         Playlist Name: {{list_name}}
 
         <br/><br/>
@@ -84,67 +89,101 @@ function numberToColorRgb(i) {
 
 
     </div>
-    <div class="col-3">
+    <div class="col-6" align="right">
+        <button type="button" class="btn btn-primary" onclick="showRenameDialog('{{list_id}}','{{list_name}}');"
+                data-bs-toggle="modal" data-bs-target="#renameModal"><i class="bi bi-card-text"></i> Rename
+        </button>
 
-        <a class="bi bi-card-text" onclick="showRenameDialog('{{list_id}}','{{list_name}}');"
-           data-bs-toggle="modal" data-bs-target="#renameModal"> Rename</a>
-        <br/>
-        <a class="bi-arrows-angle-expand" onclick="showSplitDialog('{{list_id}}','{{list_name}}');"
-           data-bs-toggle="modal" data-bs-target="#splitModal"> Split</a>
         <br/>
 
+        <button type="button" class="btn btn-primary" onclick="showSplitDialog('{{list_id}}','{{list_name}}');"
+                data-bs-toggle="modal" data-bs-target="#splitModal"><i class="bi-arrows-angle-expand"> Split</i>
+        </button>
+        <br/>
 
-        <a class="bi bi-trash" onclick="showDeleteDialog('{{list_id}}','{{list_name}}');"
-           data-bs-toggle="modal" data-bs-target="#deleteModal"> Delete</a>
+        <button type="button" class="btn btn-primary" onclick="showCutDialog('{{list_id}}','{{list_name}}');"
+                data-bs-toggle="modal" data-bs-target="#cutModal"><i class="bi bi-scissors"> Cut to length</i></button>
+        <br/>
+
+        <button type="button" class="btn btn-primary" onclick="showDeleteDialog('{{list_id}}','{{list_name}}');"
+                data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3>"> Delete</i></button>
+        </a>
         <br/>
         <!-- <button type="submit" value="delete" class="btn btn-primary" name="submit_button">Delete</button> -->
     </div>
 </div>
 
+
 <div name="funtorunbox" align="right">
-    <i class="bi bi-funnel"></i> Filter fun-to-run only <br/>
-     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up-arrow" viewBox="0 0 16 16">
-      <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/>
-    </svg>
-
-    Climax: start slow ..and increase speed<i class="bi bi-sort-down-alt" data-bs-toggle="tooltip"  title="Sort by fun-to-run last"></i>
+    <button type="submit" value="filter-fun-to-run" class="btn btn-primary" name="submit_button">
+        <i class="bi bi-funnel"></i> Filter fun-to-run only
+    </button>
     <br/>
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-down-arrow" viewBox="0 0 16 16">
-      <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 11.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-1 0v2.6l-3.613-4.417a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61L13.445 11H10.5a.5.5 0 0 0-.5.5Z"/>
-    </svg>
-    Cool down: Start fast ..and slow down <i class="bi bi-sort-down" data-bs-toggle="tooltip"  title="Sort by fun-to-run first"> </i>
+    <button type="submit" value="sort-climax" class="btn btn-primary" name="submit_button" disabled>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up-arrow"
+             viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                  d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/>
+        </svg>
+        Climax: start slow ..and increase speed<i class="bi bi-sort-down-alt" data-bs-toggle="tooltip"
+                                                  title="Sort by fun-to-run last"></i>
+    </button>
     <br/>
-    <i class="bi bi-arrow-down-up"></i>Fartlek: Alternate Fast and slow
+    <button type="submit" value="sort-cool-down" class="btn btn-primary" name="submit_button" disabled>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+             class="bi bi-graph-down-arrow" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+                  d="M0 0h1v15h15v1H0V0Zm10 11.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-1 0v2.6l-3.613-4.417a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61L13.445 11H10.5a.5.5 0 0 0-.5.5Z"/>
+        </svg>
+        Cool down: Start fast ..and slow down <i class="bi bi-sort-down" data-bs-toggle="tooltip"
+                                                 title="Sort by fun-to-run first"> </i>
+    </button>
     <br/>
-
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rainbow" viewBox="0 0 16 16">
-      <path d="M8 4.5a7 7 0 0 0-7 7 .5.5 0 0 1-1 0 8 8 0 1 1 16 0 .5.5 0 0 1-1 0 7 7 0 0 0-7-7zm0 2a5 5 0 0 0-5 5 .5.5 0 0 1-1 0 6 6 0 1 1 12 0 .5.5 0 0 1-1 0 5 5 0 0 0-5-5zm0 2a3 3 0 0 0-3 3 .5.5 0 0 1-1 0 4 4 0 1 1 8 0 .5.5 0 0 1-1 0 3 3 0 0 0-3-3zm0 2a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 4 0 .5.5 0 0 1-1 0 1 1 0 0 0-1-1z"/>
-    </svg>
-    The arch: slow-fast-slow
+    <button type="submit" value="sort-fartlek" class="btn btn-primary" name="submit_button" disabled>
+        <i class="bi bi-arrow-down-up"></i>Fartlek: Alternate Fast and slow
+    </button>
+    <br/>
+    <button type="submit" value="sort-arch" class="btn btn-primary" name="submit_button" disabled>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rainbow"
+             viewBox="0 0 16 16">
+            <path d="M8 4.5a7 7 0 0 0-7 7 .5.5 0 0 1-1 0 8 8 0 1 1 16 0 .5.5 0 0 1-1 0 7 7 0 0 0-7-7zm0 2a5 5 0 0 0-5 5 .5.5 0 0 1-1 0 6 6 0 1 1 12 0 .5.5 0 0 1-1 0 5 5 0 0 0-5-5zm0 2a3 3 0 0 0-3 3 .5.5 0 0 1-1 0 4 4 0 1 1 8 0 .5.5 0 0 1-1 0 3 3 0 0 0-3-3zm0 2a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 4 0 .5.5 0 0 1-1 0 1 1 0 0 0-1-1z"/>
+        </svg>
+        The arch: slow-fast-slow
+    </button>
 </div>
 <div>----------</div>
-
 {% for r in l1Results %}
-{{loop.index}}- <span class="text-primary">{{ r["artist"] }}:</span>{{ r["name"] }}
-        <br/>
-{% if r["preview_url"] is not none  %}
-        <a class="bi bi-music-note" onclick="showPreviewDialog('{{ r['preview_url'] }}');"
-           data-bs-toggle="modal" data-bs-target="#previewModal" data-bs-toggle="tooltip"  title="Listen to song preview"></a>
+<div class="row">
+    <div class="col-1">{{loop.index}}
+        <input type="hidden" name="id" value="{{r['id']}}">
+        <input type="hidden" name="artist" value="{{r['artist']}}">
+        <input type="hidden" name="song" value="{{r['name']}}">
 
-{% endif %}
+    </div>
+    <div class="col-6"><span class="text-primary">{{ r["artist"] }}:</span><br/>{{ r["name"] }}</div>
+    <div class="col-1">
+        {% if r["preview_url"] is not none %}
 
+        <a class="bi bi-file-play" onclick="showPreviewDialog('{{ r['preview_url'] }}');"
+           data-bs-toggle="modal" data-bs-target="#previewModal" data-bs-toggle="tooltip"
+           title="Listen to song preview"></a>
 
+        {% endif %}
+    </div>
+    <div class="col-1">
+        <i id="colorFunToRun2{{loop.index}}"></i>
+        <script>
+            document.getElementById("colorFunToRun2{{loop.index}}").innerHTML = '<i class="bi bi-disc" style="color:'+ numberToColorHsl({{(r["danceability"]+r["energy"])*100//2 }}) + '" data-toggle="tooltip" data-placement="right" title=" Fun To Run:{{(r["danceability"]+r["energy"])*100//2 }}"></i>';
+        </script>
+    </div>
+    <div class="col-2" style='background-color:{{fNumberToColorRgb((r["danceability"]+r["energy"])*100//2 )}}'>
+        [{{(r["danceability"]+r["energy"])*100//2 }}]
+    </div>
+    <div class="col-1">
+        {{ r["duration_ms"]//60000 }}'
+    </div>
 
-
-
-<!-- option3 color the disk using js and HSL range -->
-<i   id="colorFunToRun2{{loop.index}}"></i>
-<script>document.getElementById("colorFunToRun2{{loop.index}}").innerHTML = '<i class="bi bi-disc" style="color:'+ numberToColorHsl({{(r["danceability"]+r["energy"])*100//2 }}) + '" data-toggle="tooltip" data-placement="right" title=" Fun To Run:{{(r["danceability"]+r["energy"])*100//2 }}"></i>';</script>
-fun-2-run:[{{(r["danceability"]+r["energy"])*100//2 }}]
-Tempo:[{{(r["tempo"]|int)}}]
-{{ r["duration_ms"]//60000 }}'
-<br/>
-
+</div>
 
 
 {% endfor %}
@@ -189,20 +228,22 @@ Tempo:[{{(r["tempo"]|int)}}]
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="splitMsgDiv">
-                    Splitting  Playlist
-        <div class="container">
+                    Splitting Playlist
+                    <div class="container">
 
-            <div class="form-group">
-                <label for="rangeSplit">Pick the maximum length (in minutes) of the sub-playlists to be created</label>
-                <input type="range" class="form-control-range" id="rangeSplit" min="30" max="180" name="maxMinutes" step="1"
-                       onInput="$('#rangeval').html($(this).val())">
-                <span id="rangeval">50<!-- Default value --></span>
-                <input type="hidden" id="idNamePlaylistToSplit" name="split_list_name" value="test">
-            </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-                crossorigin="anonymous"></script>
-        </div>
+                        <div class="form-group">
+                            <label for="rangeSplit">Pick the maximum length (in minutes) of the sub-playlists to be
+                                created</label>
+                            <input type="range" class="form-control-range" id="rangeSplit" min="30" max="180"
+                                   name="maxMinutes" step="1"
+                                   onInput="$('#rangeval').html($(this).val())" value="50">
+                            <span id="rangeval">50<!-- Default value --></span>
+                            <input type="hidden" id="idNamePlaylistToSplit" name="split_list_name" value="test">
+                        </div>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                                crossorigin="anonymous"></script>
+                    </div>
                     ******
                     <input type="hidden" id="split_list_id" name="split_list_id" value="test">
 
@@ -218,22 +259,51 @@ Tempo:[{{(r["tempo"]|int)}}]
     </form>
 
 
+</div>
 
+<div class="modal fade" id="cutModal" tabindex="-1" aria-labelledby="cutModalLabel"
+     aria-hidden="true">
+    <form action="playlistcut" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cutModalLabel">Cut Playlist</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="splitMsgDiv">
+                    Cutting Playlist
+                    <div class="container">
 
+                        <div class="form-group">
+                            <label for="rangeCut">Pick the target length (in minutes) of the playlists to be
+                                created</label>
+                            <input type="range" class="form-control-range" id="rangeCut" min="30" max="180"
+                                   name="maxMinutes" step="1"
+                                   onInput="$('#rangeCutVal').html($(this).val())" value="50">
+                            <span id="rangeCutVal">50<!-- Default value --></span>
+                            <input type="hidden" id="idNamePlaylistToCut" name="cut_list_name" value="test">
+                        </div>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                                crossorigin="anonymous"></script>
+                    </div>
+                    ******
+                    <input type="hidden" id="cut_list_id" name="cut_list_id" value="test">
 
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" value="cut" class="btn btn-primary" name="submit_button">Cut</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
+                </div>
+            </div>
 
-
-
-
-
+        </div>
+    </form>
 
 
 </div>
-
-
-
-
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
      aria-hidden="true">
     <form action="playlistdelete" method="post">
@@ -265,15 +335,15 @@ Tempo:[{{(r["tempo"]|int)}}]
 
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel"
      aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-body" id="previewDiv">
-                    <iframe src="" title="preview" id="previewFrame"></iframe>
-                </div>
-
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="previewDiv">
+                <iframe src="" title="preview" id="previewFrame"></iframe>
             </div>
 
         </div>
+
+    </div>
 </div>
 
 
