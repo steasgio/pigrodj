@@ -9,6 +9,7 @@ from wtforms import Form
 from wtforms import StringField, SubmitField, RadioField, SelectField, SelectMultipleField, widgets
 import logging
 import math
+import operator
 
 logging.basicConfig(level=logging.DEBUG)
 # from wtforms.validators import Required
@@ -105,7 +106,54 @@ def cutPlaylistToSpotify(intPlaylistId,strPlaylistName, intMaxMinutes,  token ):
 
 	return "ok"
 
+def filterFTRPlaylistToSpotify(intPlaylistId,strPlaylistName, intMinFTR,  token ):
+	songsList=retrieveAttributesOfSongsInAPlayslistFromSpotify(intPlaylistId,token)
+	listLength=0
+	targetList=[]
 
+	for s in songsList:
+		danceability=s["danceability"]
+		energy=s["energy"]
+		if (danceability is not None and energy is not None):
+			if ((danceability>=(intMinFTR/100)) and (energy>=(intMinFTR/100))):
+				targetList.append(s["id"])
+				listLength=listLength+1
+	if listLength > 0:
+		savePlaylistToSpotify(strPlaylistName+"-FTR"+str(intMinFTR),"by PigroDj",targetList,token)
+		logging.debug("writing "+ strPlaylistName+"-"+str(intMinFTR))
+		logging.debug(targetList)
+
+	return "ok"
+'''
+dfRunnable = df[(df.danceability > 0.5) & (df.energy > 0.5)]
+dfRunnableTop = dfRunnable.sort_values(by=['energy'], inplace=False, ascending=False)
+dfRunnableTop.drop_duplicates(subset="name",inplace=True)
+'''
+def sortUpPlaylistToSpotify(intPlaylistId,strPlaylistName, strDirection, strSortParameter, token ):
+	songsList=retrieveAttributesOfSongsInAPlayslistFromSpotify(intPlaylistId,token)
+	listLength=0
+	targetList=[]
+	'''
+		for s in songsList:
+			danceability=s["danceability"]
+			energy=s["energy"]
+			if (danceability is not None and energy is not None):
+				if ((danceability>=(intMinFTR/100)) and (energy>=(intMinFTR/100))):
+					targetList.append(s["id"])
+					listLength=listLength+1
+		if listLength > 0:
+			savePlaylistToSpotify(strPlaylistName+"-FTR"+str(intMinFTR),"by PigroDj",targetList,token)
+			logging.debug("writing "+ strPlaylistName+"-"+str(intMinFTR))
+			logging.debug(targetList)
+	'''
+	bolReverse=True
+	if strDirection=="ASC":
+		bolReverse=False
+	songsList.sort(key=operator.itemgetter(strSortParameter),reverse=bolReverse)
+	for s in songsList:
+		targetList.append(s["id"])
+	savePlaylistToSpotify(strPlaylistName + "-" + strDirection, "by PigroDj", targetList, token)
+	return "ok"
 def savePlaylistToSpotify(strPlaylistName, strDestription, songslist, token):
 	''' writes a playslist in the Spotify account
 	Parameters:
@@ -307,6 +355,9 @@ def retrieveAttributesOfSongsInAPlayslistFromSpotify(playlist_id, token):
 			tracks[c]["valence"] = features[c].valence
 			tracks[c]["tempo"] = features[c].tempo
 			tracks[c]["liveness"] = features[c].liveness
+
+			tracks[c]["funtorun"] = (features[c].energy+features[c].danceability)*100//2
+			tracks[c]["isfuntorun"] = (features[c].energy >0.5) and (features[c].danceability>0.5)
 		return tracks
 	except tk.BadRequest as ex:
 		logging.error("Bad request.. retrieving songs in playslist")
@@ -589,6 +640,39 @@ def app_factory() -> Flask:
 									   dynamicText="Error cutting " + request.values[
 										   'cut_list_id'] + "  minutes=" +
 												   request.values['maxMinutes'])
+
+
+	@app.route('/playlistfilterFTR', methods=['GET', 'POST'])
+	def playslistfilterFTR():
+		user = session.get('user', None)
+		token = users.get(user, None)
+		if user is not None and request.values['filterFTR_list_id'] is not None and request.values['minFTR'] is not None:
+
+			res=filterFTRPlaylistToSpotify(request.values['filterFTR_list_id'],request.values['filterFTR_list_name'],int(request.values['minFTR']),  token )
+			if res=="ok":
+				return render_template('results.html',
+									   dynamicText="Playlist successfully filtered wuth min   " +request.values['minFTR'] + " FunToRun")
+			else:
+				return render_template('results.html',
+									   dynamicText="Error cutting " + request.values[
+										   'cut_list_id'] + "  FTR=" +
+												   request.values['minFTR'])
+
+	@app.route('/playlistsortup', methods=['GET', 'POST'])
+	def playslistsortup():
+		user = session.get('user', None)
+		token = users.get(user, None)
+		if user is not None and request.values['sortUp_list_id'] is not None :
+
+			res=sortUpPlaylistToSpotify(request.values['sortUp_list_id'],request.values['sortUp_list_name'],"ASC","funtorun",  token )
+			if res=="ok":
+				return render_template('results.html',
+									   dynamicText="Playlist successfully sorted   " )
+			else:
+				return render_template('results.html',
+									   dynamicText="Error cutting " + request.values[
+										   'sortUp_list_id'] )
+
 
 	@app.route('/playlistdelete', methods=['GET', 'POST'])
 	def playslistdelete():

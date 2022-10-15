@@ -14,6 +14,16 @@
         $('input[id="cut_list_id"]').val(_list_id);
          $('input[id="idNamePlaylistToCut"]').val(_list_name);
     }
+
+    function showfilterFTRDialog(_list_id, _list_name) {
+        $('input[id="filterFTR_list_id"]').val(_list_id);
+         $('input[id="idNamePlaylistTofilterFTR"]').val(_list_name);
+    }
+
+    function showSortUpDialog(_list_id, _list_name) {
+        $('input[id="sortUp_list_id"]').val(_list_id);
+         $('input[id="idNamePlaylistToSortUp"]').val(_list_name);
+    }
     function showDeleteDialog(_list_id, _list_name) {
          $('input[id="idPlaylistToDelete"]').val(_list_id);
          $('input[id="idShowingPlaylistNameToDelete"]').val(_list_name);
@@ -107,19 +117,20 @@ function numberToColorRgb(i) {
 
         <button type="button" class="btn btn-primary" onclick="showDeleteDialog('{{list_id}}','{{list_name}}');"
                 data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3>"> Delete</i></button>
-        </a>
+
         <br/>
         <!-- <button type="submit" value="delete" class="btn btn-primary" name="submit_button">Delete</button> -->
     </div>
 </div>
 
 
-<div name="funtorunbox" align="right">
-    <button type="submit" value="filter-fun-to-run" class="btn btn-primary" name="submit_button">
+<div  align="right">
+    <button type="button" value="filter-fun-to-run" class="btn btn-primary" onclick="showfilterFTRDialog('{{list_id}}','{{list_name}}');"
+                data-bs-toggle="modal" data-bs-target="#filterFTRModal">
         <i class="bi bi-funnel"></i> Filter fun-to-run only
     </button>
     <br/>
-    <button type="submit" value="sort-climax" class="btn btn-primary" name="submit_button" disabled>
+    <button type="button" value="sort-climax" class="btn btn-primary" onclick="showSortUpDialog('{{list_id}}','{{list_name}}');" data-bs-toggle="modal" data-bs-target="#sortUpModal">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up-arrow"
              viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -165,7 +176,7 @@ function numberToColorRgb(i) {
         {% if r["preview_url"] is not none %}
 
         <a class="bi bi-file-play" onclick="showPreviewDialog('{{ r['preview_url'] }}');"
-           data-bs-toggle="modal" data-bs-target="#previewModal" data-bs-toggle="tooltip"
+           data-bs-toggle="modal" data-bs-target="#previewModal"
            title="Listen to song preview"></a>
 
         {% endif %}
@@ -177,8 +188,13 @@ function numberToColorRgb(i) {
         </script>
     </div>
     <div class="col-2" style='background-color:{{fNumberToColorRgb((r["danceability"]+r["energy"])*100//2 )}}'>
-        [{{(r["danceability"]+r["energy"])*100//2 }}]
+        {{((r["danceability"]+r["energy"])*100//2)|round|int }}
+        {% if r["isfuntorun"] %}
+            F<iclass="bibi-dribbble"></i>
+
+        {% endif %}
     </div>
+
     <div class="col-1">
         {{ r["duration_ms"]//60000 }}'
     </div>
@@ -271,7 +287,7 @@ function numberToColorRgb(i) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="splitMsgDiv">
+                <div class="modal-body" id="cutMsgDiv">
                     Cutting Playlist
                     <div class="container">
 
@@ -333,6 +349,84 @@ function numberToColorRgb(i) {
     </form>
 </div>
 
+<div class="modal fade" id="filterFTRModal" tabindex="-1" aria-labelledby="filterFTRModalLabel"
+     aria-hidden="true">
+    <form action="playlistfilterFTR" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterFTRModalLabel">Filter Playlist</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="filterFTRMsgDiv">
+                    Create a new Playlist containing only the subset of songs that are Fun-To-Run (i.e. with energy and beat supporting your run)
+                    <div class="container">
+
+                        <div class="form-group">
+                            <label for="rangefilterFTR">Pick the minimum Fun-to-Run value</label>
+                            <input type="range" class="form-control-range" id="rangefilterFTR" min="30" max="100"
+                                   name="minFTR" step="1"
+                                   onInput="$('#rangefilterFTRVal').html($(this).val())" value="50">
+                            <span id="rangefilterFTRVal">50<!-- Default value --></span>
+                            <input type="hidden" id="idNamePlaylistTofilterFTR" name="filterFTR_list_name" value="test">
+                        </div>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+                                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                                crossorigin="anonymous"></script>
+                    </div>
+                    ******
+                    <input type="hidden" id="filterFTR_list_id" name="filterFTR_list_id" value="test">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" value="filterFTR" class="btn btn-primary" name="submit_button">filterFTR</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+</div>
+<div class="modal fade" id="sortUpModal" tabindex="-1" aria-labelledby="sortUpModalLabel"
+     aria-hidden="true">
+    <form action="playlistsortup" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sortUpModalLabel">Filter Playlist</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="sortUpMsgDiv">
+                    Create a new Playlist sorted up
+                    <div class="container">
+
+                        <div class="form-group">
+
+                            <input type="hidden" id="idNamePlaylistToSortUp" name="sortUp_list_name" value="test">
+                        </div>
+
+                    </div>
+                    ******
+                    <input type="hidden" id="sortUp_list_id" name="sortUp_list_id" value="test">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" value="sortUp" class="btn btn-primary" name="submit_button">Sort Up</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+</div>
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
