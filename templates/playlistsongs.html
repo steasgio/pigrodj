@@ -24,6 +24,10 @@
         $('input[id="sortUp_list_id"]').val(_list_id);
          $('input[id="idNamePlaylistToSortUp"]').val(_list_name);
     }
+    function showSortDownDialog(_list_id, _list_name) {
+        $('input[id="sortDown_list_id"]').val(_list_id);
+         $('input[id="idNamePlaylistToSortDown"]').val(_list_name);
+    }
     function showDeleteDialog(_list_id, _list_name) {
          $('input[id="idPlaylistToDelete"]').val(_list_id);
          $('input[id="idShowingPlaylistNameToDelete"]').val(_list_name);
@@ -140,7 +144,8 @@ function numberToColorRgb(i) {
                                                   title="Sort by fun-to-run last"></i>
     </button>
     <br/>
-    <button type="submit" value="sort-cool-down" class="btn btn-primary" name="submit_button" disabled>
+       <button type="button" value="sort-cool-down" class="btn btn-primary" onclick="showSortDownDialog('{{list_id}}','{{list_name}}');" data-bs-toggle="modal" data-bs-target="#sortDownModal">
+
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
              class="bi bi-graph-down-arrow" viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -190,7 +195,7 @@ function numberToColorRgb(i) {
     <div class="col-2" style='background-color:{{fNumberToColorRgb((r["danceability"]+r["energy"])*100//2 )}}'>
         {{((r["danceability"]+r["energy"])*100//2)|round|int }}
         {% if r["isfuntorun"] %}
-            F<iclass="bibi-dribbble"></i>
+            F<i class="bibi-dribbble"></i>
 
         {% endif %}
     </div>
@@ -402,7 +407,7 @@ function numberToColorRgb(i) {
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="sortUpMsgDiv">
-                    Create a new Playlist sorted up
+                    Create a new Playlist starting slow and increasing runnability
                     <div class="container">
 
                         <div class="form-group">
@@ -417,6 +422,43 @@ function numberToColorRgb(i) {
                 </div>
                 <div class="modal-footer">
                     <button type="submit" value="sortUp" class="btn btn-primary" name="submit_button">Sort Up</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+</div>
+
+<div class="modal fade" id="sortDownModal" tabindex="-1" aria-labelledby="sortDownModalLabel"
+     aria-hidden="true">
+    <form action="playlistsortdown" method="post">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sortDownModalLabel">Filter Playlist</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="sortDownMsgDiv">
+                    Create a new Playlist sorting most runnable songs first
+                    <div class="container">
+
+                        <div class="form-group">
+
+                            <input type="hidden" id="idNamePlaylistTosortDown" name="sortDown_list_name" value="test">
+                        </div>
+
+                    </div>
+                    ******
+                    <input type="hidden" id="sortDown_list_id" name="sortDown_list_id" value="test">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" value="sortDown" class="btn btn-primary" name="submit_button">Sort Down</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
                 </div>

@@ -670,9 +670,24 @@ def app_factory() -> Flask:
 									   dynamicText="Playlist successfully sorted   " )
 			else:
 				return render_template('results.html',
-									   dynamicText="Error cutting " + request.values[
+									   dynamicText="Error sorting " + request.values[
 										   'sortUp_list_id'] )
 
+
+	@app.route('/playlistsortdown', methods=['GET', 'POST'])
+	def playslistsortdown():
+		user = session.get('user', None)
+		token = users.get(user, None)
+		if user is not None and request.values['sortDown_list_id'] is not None :
+
+			res=sortUpPlaylistToSpotify(request.values['sortDown_list_id'],request.values['sortDown_list_name'],"DESC","funtorun",  token )
+			if res=="ok":
+				return render_template('results.html',
+									   dynamicText="Playlist successfully sorted   " )
+			else:
+				return render_template('results.html',
+									   dynamicText="Error sorting " + request.values[
+										   'sortDown_list_id'] )
 
 	@app.route('/playlistdelete', methods=['GET', 'POST'])
 	def playslistdelete():
