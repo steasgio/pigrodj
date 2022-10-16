@@ -129,7 +129,7 @@ dfRunnable = df[(df.danceability > 0.5) & (df.energy > 0.5)]
 dfRunnableTop = dfRunnable.sort_values(by=['energy'], inplace=False, ascending=False)
 dfRunnableTop.drop_duplicates(subset="name",inplace=True)
 '''
-def sortUpPlaylistToSpotify(intPlaylistId,strPlaylistName, strDirection, strSortParameter, token ):
+def sortPlaylistToSpotify(intPlaylistId, strPlaylistName, strDirection, strSortParameter, token):
 	songsList=retrieveAttributesOfSongsInAPlayslistFromSpotify(intPlaylistId,token)
 	listLength=0
 	targetList=[]
@@ -664,7 +664,7 @@ def app_factory() -> Flask:
 		token = users.get(user, None)
 		if user is not None and request.values['sortUp_list_id'] is not None :
 
-			res=sortUpPlaylistToSpotify(request.values['sortUp_list_id'],request.values['sortUp_list_name'],"ASC","funtorun",  token )
+			res=sortPlaylistToSpotify(request.values['sortUp_list_id'], request.values['sortUp_list_name'], "ASC", "funtorun", token)
 			if res=="ok":
 				return render_template('results.html',
 									   dynamicText="Playlist successfully sorted   " )
@@ -680,7 +680,7 @@ def app_factory() -> Flask:
 		token = users.get(user, None)
 		if user is not None and request.values['sortDown_list_id'] is not None :
 
-			res=sortUpPlaylistToSpotify(request.values['sortDown_list_id'],request.values['sortDown_list_name'],"DESC","funtorun",  token )
+			res=sortPlaylistToSpotify(request.values['sortDown_list_id'], request.values['sortDown_list_name'], "DESC", "funtorun", token)
 			if res=="ok":
 				return render_template('results.html',
 									   dynamicText="Playlist successfully sorted   " )
