@@ -92,79 +92,66 @@ function numberToColorRgb(i) {
 <div class="row">
     <div class="col-6">
         Playlist Name: {{list_name}}
-
-        <br/><br/>
-
-        Total length: {{lengthOfPlaylist}}' <br/>
-
-        <br/>
-        <br/>
-        <br/>
-
-
+        <br/>  <br/>
     </div>
-    <div class="col-6" align="right">
+    <div class="col-6">
+        Total length: {{lengthOfPlaylist}}' <br/>  <br/>
+    </div>
+
+    <div class="col-12" align="right">
         <button type="button" class="btn btn-primary" onclick="showRenameDialog('{{list_id}}','{{list_name}}');"
                 data-bs-toggle="modal" data-bs-target="#renameModal"><i class="bi bi-card-text"></i> Rename
         </button>
 
-        <br/>
 
         <button type="button" class="btn btn-primary" onclick="showSplitDialog('{{list_id}}','{{list_name}}');"
                 data-bs-toggle="modal" data-bs-target="#splitModal"><i class="bi-arrows-angle-expand"> Split</i>
         </button>
-        <br/>
 
         <button type="button" class="btn btn-primary" onclick="showCutDialog('{{list_id}}','{{list_name}}');"
-                data-bs-toggle="modal" data-bs-target="#cutModal"><i class="bi bi-scissors"> Cut to length</i></button>
-        <br/>
+                data-bs-toggle="modal" data-bs-target="#cutModal"><i class="bi bi-scissors"> Resize</i></button>
 
         <button type="button" class="btn btn-primary" onclick="showDeleteDialog('{{list_id}}','{{list_name}}');"
                 data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3>"> Delete</i></button>
 
-        <br/>
+        <br/>  <br/>
         <!-- <button type="submit" value="delete" class="btn btn-primary" name="submit_button">Delete</button> -->
     </div>
 </div>
 
 
-<div  align="right">
+
+<div  class="col-12"  align="right">
     <button type="button" value="filter-fun-to-run" class="btn btn-primary" onclick="showfilterFTRDialog('{{list_id}}','{{list_name}}');"
-                data-bs-toggle="modal" data-bs-target="#filterFTRModal">
-        <i class="bi bi-funnel"></i> Filter fun-to-run only
+                data-bs-toggle="modal" data-bs-target="#filterFTRModal" title="Filter fun to run songs only">
+        <i class="bi bi-funnel"></i>Fun-2-run
     </button>
-    <br/>
-    <button type="button" value="sort-climax" class="btn btn-primary" onclick="showSortUpDialog('{{list_id}}','{{list_name}}');" data-bs-toggle="modal" data-bs-target="#sortUpModal">
+    <button type="button" value="sort-climax" class="btn btn-primary" onclick="showSortUpDialog('{{list_id}}','{{list_name}}');" data-bs-toggle="modal" data-bs-target="#sortUpModal" title="start slow ..and increase speed">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up-arrow"
              viewBox="0 0 16 16">
             <path fill-rule="evenodd"
                   d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/>
         </svg>
-        Climax: start slow ..and increase speed<i class="bi bi-sort-down-alt" data-bs-toggle="tooltip"
-                                                  title="Sort by fun-to-run last"></i>
+        Up
     </button>
-    <br/>
-       <button type="button" value="sort-cool-down" class="btn btn-primary" onclick="showSortDownDialog('{{list_id}}','{{list_name}}');" data-bs-toggle="modal" data-bs-target="#sortDownModal">
+    <button type="button" value="sort-cool-down" class="btn btn-primary" onclick="showSortDownDialog('{{list_id}}','{{list_name}}');" data-bs-toggle="modal" data-bs-target="#sortDownModal" title="Start fast ..and slow down">
 
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
              class="bi bi-graph-down-arrow" viewBox="0 0 16 16">
             <path fill-rule="evenodd"
                   d="M0 0h1v15h15v1H0V0Zm10 11.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-1 0v2.6l-3.613-4.417a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61L13.445 11H10.5a.5.5 0 0 0-.5.5Z"/>
         </svg>
-        Cool down: Start fast ..and slow down <i class="bi bi-sort-down" data-bs-toggle="tooltip"
-                                                 title="Sort by fun-to-run first"> </i>
+        Down
     </button>
-    <br/>
     <button type="submit" value="sort-fartlek" class="btn btn-primary" name="submit_button" disabled>
-        <i class="bi bi-arrow-down-up"></i>Fartlek: Alternate Fast and slow
+        <i class="bi bi-arrow-down-up" title="Alternate Fast and slow"></i>Fartlek
     </button>
-    <br/>
-    <button type="submit" value="sort-arch" class="btn btn-primary" name="submit_button" disabled>
+    <button type="submit" value="sort-arch" class="btn btn-primary" name="submit_button" disabled title="slow-fast-slow">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rainbow"
              viewBox="0 0 16 16">
             <path d="M8 4.5a7 7 0 0 0-7 7 .5.5 0 0 1-1 0 8 8 0 1 1 16 0 .5.5 0 0 1-1 0 7 7 0 0 0-7-7zm0 2a5 5 0 0 0-5 5 .5.5 0 0 1-1 0 6 6 0 1 1 12 0 .5.5 0 0 1-1 0 5 5 0 0 0-5-5zm0 2a3 3 0 0 0-3 3 .5.5 0 0 1-1 0 4 4 0 1 1 8 0 .5.5 0 0 1-1 0 3 3 0 0 0-3-3zm0 2a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 4 0 .5.5 0 0 1-1 0 1 1 0 0 0-1-1z"/>
         </svg>
-        The arch: slow-fast-slow
+        Arch
     </button>
 </div>
 <div>----------</div>
@@ -472,11 +459,10 @@ function numberToColorRgb(i) {
 <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel"
      aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body" id="previewDiv">
+        <div class="modal-content" style="background-color:purple">Song preview:
+            <div class="modal-body" id="previewDiv" >
                 <iframe src="" title="preview" id="previewFrame"></iframe>
             </div>
-
         </div>
 
     </div>
