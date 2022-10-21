@@ -434,6 +434,8 @@ def app_factory() -> Flask:
 			myForm.myLists.choices = myForm.myLists.data
 
 			myplaylists = myForm.myLists.data
+			if myplaylists is None or len(myplaylists)<2:
+				return render_template("results.html",dynamicText="Select at least 2 playslists")
 			if request.form['submit_button'] == 'mix':
 				_playlistWData = []
 				for playlist_id in myplaylists:
@@ -454,7 +456,7 @@ def app_factory() -> Flask:
 				newPlaylistId = savePlaylistToSpotify(newPlaylistName, "Playlist by PigroDJ", _mixedList, token)
 
 				return render_template('playlist_created.html', dynamicText="Playlist " + newPlaylistName + " mixed !",
-									   list_id=newPlaylistId)
+									   list_id=newPlaylistId,list_name=newPlaylistName)
 			elif request.form['submit_button'] == 'join':
 				''' concatenate two playlists '''
 

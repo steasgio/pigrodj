@@ -106,7 +106,16 @@
         <div style="margin-top: 5%">
             <form method="post">
                 <div class="row">
-                    <div class="col-9">
+                    <div class="col-12">
+
+                        <button type="submit" value="mix" class="btn btn-primary" name="submit_button"> <i class="bi bi-arrows-angle-contract"></i> Mix</button>
+
+                        <button type="submit" value="join" class="btn btn-primary" name="submit_button"><i class="bi bi-arrows-collapse"></i> Join</button>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
                         {% for subfield in form.myLists %}
                         <div class="row" >
                             <div class="col-1">
@@ -133,13 +142,7 @@
 
                         {% endfor %}
                     </div>
-                    <div class="col-3">
 
-                        <button type="submit" value="mix" class="btn btn-primary" name="submit_button"> <i class="bi bi-arrows-angle-contract"></i> Mix</button>
-                        <br/> <br/>
-                        <button type="submit" value="join" class="btn btn-primary" name="submit_button"><i class="bi bi-arrows-collapse"></i> Join</button>
-
-                    </div>
                 </div>
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
