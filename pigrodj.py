@@ -1,5 +1,5 @@
 # applicazione web semplificata x test sui cloud richiede autenticazione su spotify e richiama api i cui risultati sono visualizzati in html
-
+#v2
 import tekore as tk
 import pandas as pd
 from flask import Flask, request, redirect, session
