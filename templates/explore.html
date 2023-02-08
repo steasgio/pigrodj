@@ -67,7 +67,7 @@
                    href="/">Home</a>
                 <a class="nav-link" href="/playlists">Playlists</a>
                 <a class="nav-link" href="/playlistmgr">Combiner</a>
-                <a class="nav-link" href="/explore">Explore</a>
+                <a class="nav-link active" href="/explore">Explore</a>
                 <a class="nav-link" href="/logout">Logout</a>
                 <a class="nav-link" href="/credits">Credits</a>
             </nav>
@@ -80,8 +80,10 @@
         {{dynamicText |safe}}
          <p class="row">
             <div class="container" align="left">
-                    {{ l1Results }}
-        </div>
+                   <a href="/runbasics?time_range=short_term" >Liked songs short term</a> <br/>
+                     <a href="/runbasics?time_range=medium_term" >Liked songs medium term</a> <br/>
+                    <a href="/runbasics?time_range=long_term" >Liked songs long term</a> <br/>
+            </div>
 
 
 

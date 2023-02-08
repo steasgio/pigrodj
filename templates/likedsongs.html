@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://getbootstrap.com/docs/5.0/examples/cover/# -->
+<html lang="en" class="h-100">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>Song2Run.com</title>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+
+    function myloadSongs(_list_id, _list_name) {
+            $('#msgDiv').load('/playlistsongs', // url
+               { list_id: _list_id,
+                 list_name: _list_name},    // data
+                  function(data, status, jqXGR) {  // callback function
+                                       // alert('data loaded:'+data);
+                });
+                return "ok";
+        }
+
+
+    </script>
+    <!-- Bootstrap 5 CSS -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+            crossorigin="anonymous">
+
+    <!-- Bootstrap 5 JS -->
+    <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+            crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Favicons -->
+
+    <link rel="icon" href="/static/images/favicon.png">
+
+    <meta name="theme-color" content="#7952b3">
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .modal-backdrop {
+           background-color: grey;
+      }
+      .modal-header{
+        background-color: darkgreen;
+        color: white;
+      }
+      .modal-body{
+        background-color: black;
+        color: white;
+      }
+
+      .modal {
+      overflow-y:auto;
+      } //https://stackoverflow.com/questions/28077066/bootstrap-modal-issue-scrolling-gets-disabled
+
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="./static/css/cover-template/cover.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="static/images/favicon.png">
+</head>
+<body class="d-flex h-100 text-center text-white bg-dark">
+
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="mb-auto">
+        <div>
+            <h3 class="float-md-start mb-0">Song2Run.com</h3>
+            <nav class="nav nav-masthead justify-content-center float-md-end">
+                <a class="nav-link" aria-current="page"
+                   href="/">Home</a>
+                <a class="nav-link" href="/playlists">Playlists</a>
+                <a class="nav-link" href="/playlistmgr">Combiner</a>
+                <a class="nav-link active" href="/explore">Explore</a>
+                <a class="nav-link" href="/logout">Logout</a>
+                <a class="nav-link" href="/credits">Credits</a>
+            </nav>
+        </div>
+    </header>
+<script type="text/javascript">
+
+    function showRenameDialog(_list_id, _list_name) {
+       $('input[id="txtName"]').val('');
+       $('input[id="txtName"]').attr("placeholder",_list_name);
+       $('input[id="rename_list_id"]').val(_list_id);
+
+    }
+    function showSplitDialog(_list_id, _list_name) {
+        $('input[id="split_list_id"]').val(_list_id);
+         $('input[id="idNamePlaylistToSplit"]').val(_list_name);
+    }
+    function showCutDialog(_list_id, _list_name) {
+        $('input[id="cut_list_id"]').val(_list_id);
+         $('input[id="idNamePlaylistToCut"]').val(_list_name);
+    }
+
+    function showfilterFTRDialog(_list_id, _list_name) {
+        $('input[id="filterFTR_list_id"]').val(_list_id);
+         $('input[id="idNamePlaylistTofilterFTR"]').val(_list_name);
+    }
+
+    function showSortUpDialog(_list_id, _list_name) {
+        $('input[id="sortUp_list_id"]').val(_list_id);
+         $('input[id="idNamePlaylistToSortUp"]').val(_list_name);
+    }
+    function showSortDownDialog(_list_id, _list_name) {
+        $('input[id="sortDown_list_id"]').val(_list_id);
+         $('input[id="idNamePlaylistToSortDown"]').val(_list_name);
+    }
+    function showDeleteDialog(_list_id, _list_name) {
+         $('input[id="idPlaylistToDelete"]').val(_list_id);
+         $('input[id="idShowingPlaylistNameToDelete"]').val(_list_name);
+         $('input[id="idNamePlaylistToDelete"]').val(_list_name);
+    }
+    function showPreviewDialog(_url) {
+        document.getElementById("previewDiv").innerHTML= "<iframe src='"+_url+"'></iframe>";
+
+    }
+    /** http://jsfiddle.net/rE6Rk/1/ **/
+
+function hslToRgb(h, s, l){
+    var r, g, b;
+
+    if(s == 0){
+        r = g = b = l; // achromatic
+    }else{
+        function hue2rgb(p, q, t){
+            if(t < 0) t += 1;
+            if(t > 1) t -= 1;
+            if(t < 1/6) return p + (q - p) * 6 * t;
+            if(t < 1/2) return q;
+            if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        }
+
+        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        var p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+    }
+
+    return [Math.floor(r * 255), Math.floor(g * 255), Math.floor(b * 255)];
+}
+
+// convert a number to a color using hsl
+function numberToColorHsl(i) {
+    // as the function expects a value between 0 and 1, and red = 0° and green = 120°
+    // we convert the input to the appropriate hue value
+    var hue = i * 1.2 / 360;
+    // we convert hsl to rgb (saturation 100%, lightness 50%)
+    var rgb = hslToRgb(hue, 1, .5);
+    // we format to css value and return
+    return 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+}
+
+// convert a color to a number using hsl
+// based on formula as provided by @KamilT
+function numberToColorRgb(i) {
+    // we calculate red and green
+    var red = Math.floor(255 - (255 * i / 100));
+    var green = Math.floor(255 * i / 100);
+    // we format to css value and return
+    return 'rgb('+red+','+green+',0)'
+}
+
+
+
+
+</script>
+<h1>{{dynamicText |safe}} </h1>
+<br/>
+    <br/>
+
+
+{% for r in l1Results %}
+<div class="row" style='background-color:{{fNumberToColorRgb((r["danceability"]+r["energy"])*100//2 )}}'>
+    <div class="col-1">{{loop.index}}
+        <input type="hidden" name="id" value="{{r['id']}}">
+        <input type="hidden" name="artist" value="{{r['artist']}}">
+        <input type="hidden" name="song" value="{{r['name']}}">
+
+    </div>
+    <div class="col-6">{{ r["name"] }}</span><br/><span class="text-primary">{{ r["artist"] }}</div>
+    <div class="col-1">
+        {% if r["preview_url"] is not none %}
+
+        <a class="bi bi-file-play" onclick="showPreviewDialog('{{ r['preview_url'] }}');"
+           data-bs-toggle="modal" data-bs-target="#previewModal"
+           title="Listen to song preview"></a>
+
+        {% endif %}
+    </div>
+
+    <div class="col-2" >
+
+        {% if r["isfuntorun"] %}
+
+            <img src="static/images/flaticon/running4-24.png" >
+        {% endif %}
+    </div>
+    <div class="col-1">
+      {{((r["danceability"]+r["energy"])*100//2)|round|int }}
+    </div>
+    <div class="col-1">
+        {{ r["duration_ms"]//60000 }}'
+    </div>
+
+</div>
+
+
+{% endfor %}
+
+<!-- Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color:purple">Song preview:
+            <div class="modal-body" id="previewDiv" >
+                <iframe src="" title="preview" id="previewFrame"></iframe>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+</div>
+</body>
+</html>
+
+

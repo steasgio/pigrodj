@@ -79,6 +79,98 @@
       overflow-y:auto;
       } //https://stackoverflow.com/questions/28077066/bootstrap-modal-issue-scrolling-gets-disabled
 
+
+
+
+
+html, body {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ul.cloud {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  line-height: 2.75rem;
+  width: 450px;
+}
+
+ul.cloud a {
+  /*
+  Not supported by any browser at the moment :(
+  --size: attr(data-weight number);
+  */
+  --size: 4;
+  --color: #a33;
+  color: var(--color);
+  font-size: calc(var(--size) * 0.25rem + 0.5rem);
+  display: block;
+  padding: 0.125rem 0.25rem;
+  position: relative;
+  text-decoration: none;
+  /*
+  For different tones of a single color
+  opacity: calc((15 - (9 - var(--size))) / 15);
+  */
+}
+ul.cloud a[data-weight="0"] { --size: 1; }
+ul.cloud a[data-weight="1"] { --size: 1; }
+ul.cloud a[data-weight="2"] { --size: 2; }
+ul.cloud a[data-weight="3"] { --size: 3; }
+ul.cloud a[data-weight="4"] { --size: 4; }
+ul.cloud a[data-weight="5"] { --size: 5; }
+ul.cloud a[data-weight="6"] { --size: 6; }
+ul.cloud a[data-weight="7"] { --size: 7; }
+ul.cloud a[data-weight="8"] { --size: 8; }
+ul.cloud a[data-weight="9"] { --size: 9; }
+ul.cloud a[data-weight="10"] { --size: 10; }
+
+ul[data-show-value] a::after {
+  content: " (" attr(data-weight) ")";
+  font-size: 1rem;
+}
+
+ul.cloud li:nth-child(2n+1) a { --color: #181; }
+ul.cloud li:nth-child(3n+1) a { --color: #33a; }
+ul.cloud li:nth-child(4n+1) a { --color: #c38; }
+
+ul.cloud a:focus {
+  outline: 1px dashed;
+}
+
+ul.cloud a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 100%;
+  background: var(--color);
+  transform: translate(-50%, 0);
+  opacity: 0.15;
+  transition: width 0.25s;
+}
+
+ul.cloud a:focus::before,
+ul.cloud a:hover::before {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion) {
+  ul.cloud * {
+    transition: none !important;
+  }
+}
+
     </style>
 
 
@@ -95,8 +187,8 @@
             <nav class="nav nav-masthead justify-content-center float-md-end">
                 <a class="nav-link" aria-current="page"
                    href="/">Home</a>
-                <a class="nav-link" href="/playlists">Playlists</a>
-                <a class="nav-link active" href="/playlistmgr">Combiner</a>
+                <a class="nav-link active" href="/playlists">Playlists</a>
+                <a class="nav-link" href="/playlistmgr">Combiner</a>
                 <a class="nav-link" href="/explore">Explore</a>
                 <a class="nav-link" href="/logout">Logout</a>
                 <a class="nav-link" href="/credits">Credits</a>
@@ -108,45 +200,40 @@
 
         <div style="margin-top: 5%">
             <form method="post">
-                <div class="row">
-                    <div class="col-12">
 
-                        <button type="submit" value="mix" class="btn btn-primary" name="submit_button"> <i class="bi bi-arrows-angle-contract"></i> Mix</button>
-
-                        <button type="submit" value="join" class="btn btn-primary" name="submit_button"><i class="bi bi-arrows-collapse"></i> Join</button>
-
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
+                        <ul class="cloud" role="navigation" aria-label="Webdev word cloud">
                         {% for subfield in form.myLists %}
-                        <div class="row" >
-                            <div class="col-1">
-                                <i class="bi bi-music-note-list"></i>
-                                <!-- <img src="{{playListsDetails[subfield.data].image}}" alt="Playlist icon" width="50" height="50"> -->
-                            </div>
-                            <div class="col-9" align="left">
-                                {{subfield}}
-                                {{subfield.label}}
-                            </div>
-                            <div class="col-1" style="background-color:{{playListsDetails[subfield.data].color4numberOfTracks}}">
-                                {{playListsDetails[subfield.data].numberOfTracks}}
-                            </div>
 
-                            <div class="col-1">
+                            <li>
+
+                                {% set _max =maxNumberOfTracks %}
+                                {% set _x =playListsDetails[subfield.data].numberOfTracks %}
+
+                                {% if _x > 200 %}
+                                    {% set _x =200 %}
+                                {% endif %}
+                                {% if maxNumberOfTracks > 200 %}
+                                    {% set _max =200 %}
+                                {% endif %}
+                                {% set _weight =_x/_max %}
+                              <a onclick="myloadSongs('{{subfield.data}}','{{playListsDetails[subfield.data].name}}');"
+                                   data-bs-toggle="modal" data-bs-target="#exampleModal" data-weight="{{(_weight*10)|round|int}}">
+                                  {{subfield.label}}({{playListsDetails[subfield.data].numberOfTracks}})
+                              </a>
+
+                            </li>
+
+                                <!--
                                 <a class="bi bi-three-dots" onclick="myloadSongs('{{subfield.data}}','{{playListsDetails[subfield.data].name}}');"
                                    data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
+                                -->
 
-                            </div>
-
-
-                        </div>
 
 
                         {% endfor %}
-                    </div>
+                        </ul>
 
-                </div>
+
                 <!-- Modal -->
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
@@ -178,7 +265,7 @@
 
     </div>
 
-
+<a href="https://www.flaticon.com/free-icons/snail" title="snail icons">Snail icons created by Freepik - Flaticon</a>
 </div>
 
 

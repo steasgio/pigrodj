@@ -50,6 +50,7 @@
           font-size: 3.5rem;
         }
       }
+
     </style>
 
 
@@ -59,9 +60,9 @@
 </head>
 <body class="d-flex h-100 text-center text-white bg-dark">
 <div class="cover-container  w-100 h-100 p-3 mx-auto ">
-      <header class="mb-auto">
+    <header class="mb-auto">
         <div>
-          <h3 class="float-md-start mb-0">Song2Run.com</h3>
+            <h3 class="float-md-start mb-0">Song2Run.com</h3>
             <nav class="nav nav-masthead justify-content-center float-md-end">
                 <a class="nav-link" aria-current="page"
                    href="/">Home</a>
@@ -69,29 +70,41 @@
                 <a class="nav-link" href="/playlistmgr">Combiner</a>
                 <a class="nav-link" href="/explore">Explore</a>
                 <a class="nav-link" href="/logout">Logout</a>
-                <a class="nav-link" href="/credits">Credits</a>
+                <a class="nav-link active" href="/credits">Credits</a>
             </nav>
         </div>
-      </header>
-<div class="container" >
+    </header>
+    <main>
+        <h1>Kudos</h1>
+        <p class="lead">Many thanks to the owners of the following artifacts used to build this site:</p>
+        <p class="lead"><a href="https://developer.spotify.com/" class="text-white">Spotify Open Api</a></p>
+        <p class="lead"><a href="https://tekore.readthedocs.io/en/stable/" class="text-white">Tekore</a>: excellent
+            client for the Spotify Web API for Python</p>
+        <p class="lead">
+        <p>Cover template for <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, by <a
+                href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
+        <br/>
+          <p class="lead">
+        <a href="https://dev.to/alvaromontoro/create-a-tag-cloud-with-html-and-css-1e90" class="text-white"> Tag cloud with html and
+            css</a>
+        </p>
+        <p class="lead" align="left">
+            Icons from www.flaticon.com:
+        <ul align="left" class="text-white">
+            <li><a href="https://www.flaticon.com/free-icons/squeeze" title="squeeze icons" class="text-white">Squeeze icons created by
+                Freepik - Flaticon</a></li>
+            <li><a href="https://www.flaticon.com/free-icons/combine" title="combine icons" class="text-white">Combine icons created by
+                Nikita Golubev - Flaticon</a></li>
+            <li><a href="https://www.flaticon.com/free-icons/lucky" title="lucky icons" class="text-white">Lucky icons created by Freepik -
+                Flaticon</a></li>
 
-    <div style="margin-top:5%">
+        </ul>
+        </p>
 
-        {{dynamicText |safe}}
-         <p class="row">
-            <div class="container" align="left">
-                    {{ l1Results }}
-        </div>
+    </main>
 
-
-
-    </div>
 
 </div>
-
-
-</div>
-
 
 
 </body>
