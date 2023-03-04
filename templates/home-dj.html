@@ -95,8 +95,8 @@
             <nav class="nav nav-masthead justify-content-center float-md-end">
                 <a class="nav-link" aria-current="page"
                    href="/">Home</a>
-                <a class="nav-link" href="/playlists">Playlists</a>
-                <a class="nav-link active" href="/playlistmgr">Combiner</a>
+                <a class="nav-link" href="/playlists">Squeeze</a>
+                <a class="nav-link active" href="/playlistmgr">Combine</a>
                 <a class="nav-link" href="/explore">Explore</a>
                 <a class="nav-link" href="/logout">Logout</a>
                 <a class="nav-link" href="/credits">Credits</a>
@@ -104,7 +104,19 @@
         </div>
     </header>
     <div class="container">
+<br/>
+          <div class="row">
+      <div class="col-1">
+      </div>
+      <div class="col-6">
+          <h3>Pick two or more playlists and push mix or join to create a new playlist </h3>
+      </div>
+        <div class="col-5">
+            <a href="/playlistmgr" class="btn btn-lg btn-secondary fw-bold border-white bg-white"> <img src="/static/images/flaticon/combiner-box-64.png" alt="Combine" width="64" height="64"> &nbsp;&nbsp; Combine</a>
+        </div>
 
+      <br/>
+  </div>
 
         <div style="margin-top: 5%">
             <form method="post">
@@ -121,15 +133,12 @@
                     <div class="col-12">
                         {% for subfield in form.myLists %}
                         <div class="row" >
-                            <div class="col-1">
-                                <i class="bi bi-music-note-list"></i>
-                                <!-- <img src="{{playListsDetails[subfield.data].image}}" alt="Playlist icon" width="50" height="50"> -->
-                            </div>
+
                             <div class="col-9" align="left">
                                 {{subfield}}
                                 {{subfield.label}}
                             </div>
-                            <div class="col-1" style="background-color:{{playListsDetails[subfield.data].color4numberOfTracks}}">
+                            <div class="col-2" style="background-color:{{playListsDetails[subfield.data].color4numberOfTracks}}">
                                 {{playListsDetails[subfield.data].numberOfTracks}}
                             </div>
 
