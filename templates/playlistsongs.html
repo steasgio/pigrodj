@@ -88,14 +88,15 @@ function numberToColorRgb(i) {
 
 
 
+
 </script>
 <div class="row">
     <div class="col-6">
         Playlist Name: {{list_name}}
-        <br/>  <br/>
+        <br/> <br/>
     </div>
     <div class="col-6">
-        Total length: {{lengthOfPlaylist}}' <br/>  <br/>
+        Total length: {{lengthOfPlaylist}}' <br/> <br/>
     </div>
 
     <div class="col-12" align="right">
@@ -114,19 +115,21 @@ function numberToColorRgb(i) {
         <button type="button" class="btn btn-primary" onclick="showDeleteDialog('{{list_id}}','{{list_name}}');"
                 data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="bi bi-trash3>"> Delete</i></button>
 
-        <br/>  <br/>
+        <br/> <br/>
         <!-- <button type="submit" value="delete" class="btn btn-primary" name="submit_button">Delete</button> -->
     </div>
 </div>
 
 
-
-<div  class="col-12"  align="right">
-    <button type="button" value="filter-fun-to-run" class="btn btn-primary" onclick="showfilterFTRDialog('{{list_id}}','{{list_name}}');"
-                data-bs-toggle="modal" data-bs-target="#filterFTRModal" title="Filter fun to run songs only">
+<div class="col-12" align="right">
+    <button type="button" value="filter-fun-to-run" class="btn btn-primary"
+            onclick="showfilterFTRDialog('{{list_id}}','{{list_name}}');"
+            data-bs-toggle="modal" data-bs-target="#filterFTRModal" title="Filter fun to run songs only">
         <i class="bi bi-funnel"></i>Fun-2-run
     </button>
-    <button type="button" value="sort-climax" class="btn btn-primary" onclick="showSortUpDialog('{{list_id}}','{{list_name}}');" data-bs-toggle="modal" data-bs-target="#sortUpModal" title="start slow ..and increase speed">
+    <button type="button" value="sort-climax" class="btn btn-primary"
+            onclick="showSortUpDialog('{{list_id}}','{{list_name}}');" data-bs-toggle="modal"
+            data-bs-target="#sortUpModal" title="start slow ..and increase speed">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up-arrow"
              viewBox="0 0 16 16">
             <path fill-rule="evenodd"
@@ -134,7 +137,9 @@ function numberToColorRgb(i) {
         </svg>
         Up
     </button>
-    <button type="button" value="sort-cool-down" class="btn btn-primary" onclick="showSortDownDialog('{{list_id}}','{{list_name}}');" data-bs-toggle="modal" data-bs-target="#sortDownModal" title="Start fast ..and slow down">
+    <button type="button" value="sort-cool-down" class="btn btn-primary"
+            onclick="showSortDownDialog('{{list_id}}','{{list_name}}');" data-bs-toggle="modal"
+            data-bs-target="#sortDownModal" title="Start fast ..and slow down">
 
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
              class="bi bi-graph-down-arrow" viewBox="0 0 16 16">
@@ -146,7 +151,8 @@ function numberToColorRgb(i) {
     <button type="submit" value="sort-fartlek" class="btn btn-primary" name="submit_button" disabled>
         <i class="bi bi-arrow-down-up" title="Alternate Fast and slow"></i>Fartlek
     </button>
-    <button type="submit" value="sort-arch" class="btn btn-primary" name="submit_button" disabled title="slow-fast-slow">
+    <button type="submit" value="sort-arch" class="btn btn-primary" name="submit_button" disabled
+            title="slow-fast-slow">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rainbow"
              viewBox="0 0 16 16">
             <path d="M8 4.5a7 7 0 0 0-7 7 .5.5 0 0 1-1 0 8 8 0 1 1 16 0 .5.5 0 0 1-1 0 7 7 0 0 0-7-7zm0 2a5 5 0 0 0-5 5 .5.5 0 0 1-1 0 6 6 0 1 1 12 0 .5.5 0 0 1-1 0 5 5 0 0 0-5-5zm0 2a3 3 0 0 0-3 3 .5.5 0 0 1-1 0 4 4 0 1 1 8 0 .5.5 0 0 1-1 0 3 3 0 0 0-3-3zm0 2a1 1 0 0 0-1 1 .5.5 0 0 1-1 0 2 2 0 1 1 4 0 .5.5 0 0 1-1 0 1 1 0 0 0-1-1z"/>
@@ -177,12 +183,13 @@ function numberToColorRgb(i) {
         <i id="colorFunToRun2{{loop.index}}"></i>
         <script>
             document.getElementById("colorFunToRun2{{loop.index}}").innerHTML = '<i class="bi bi-disc" style="color:'+ numberToColorHsl({{(r["danceability"]+r["energy"])*100//2 }}) + '" data-toggle="tooltip" data-placement="right" title=" Fun To Run:{{(r["danceability"]+r["energy"])*100//2 }}"></i>';
+
         </script>
     </div>
     <div class="col-2" style='background-color:{{fNumberToColorRgb((r["danceability"]+r["energy"])*100//2 )}}'>
         {{((r["danceability"]+r["energy"])*100//2)|round|int }}
         {% if r["isfuntorun"] %}
-            F<i class="bibi-dribbble"></i>
+        F<i class="bibi-dribbble"></i>
 
         {% endif %}
     </div>
@@ -352,7 +359,8 @@ function numberToColorRgb(i) {
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="filterFTRMsgDiv">
-                    Create a new Playlist containing only the subset of songs that are Fun-To-Run (i.e. with energy and beat supporting your run)
+                    Create a new Playlist containing only the subset of songs that are Fun-To-Run (i.e. with energy and
+                    beat supporting your run)
                     <div class="container">
 
                         <div class="form-group">
@@ -372,7 +380,8 @@ function numberToColorRgb(i) {
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" value="filterFTR" class="btn btn-primary" name="submit_button">filterFTR</button>
+                    <button type="submit" value="filterFTR" class="btn btn-primary" name="submit_button">filterFTR
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
                 </div>
@@ -445,7 +454,8 @@ function numberToColorRgb(i) {
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" value="sortDown" class="btn btn-primary" name="submit_button">Sort Down</button>
+                    <button type="submit" value="sortDown" class="btn btn-primary" name="submit_button">Sort Down
+                    </button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
                 </div>
@@ -460,7 +470,7 @@ function numberToColorRgb(i) {
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" style="background-color:purple">Song preview:
-            <div class="modal-body" id="previewDiv" >
+            <div class="modal-body" id="previewDiv">
                 <iframe src="" title="preview" id="previewFrame"></iframe>
             </div>
         </div>
