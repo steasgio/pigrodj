@@ -2,8 +2,9 @@
 # v2
 import tekore as tk
 import pandas as pd
-from flask import Flask, request, redirect, session
+from flask import Flask, request, redirect, session, send_from_directory
 from flask import render_template
+from flask import jsonify
 
 from wtforms import Form
 from wtforms import StringField, SubmitField, RadioField, SelectField, SelectMultipleField, widgets
@@ -347,6 +348,7 @@ def retrieveAttributesOfSongsInAPlayslistFromSpotify(playlist_id, token):
 			trackProperties["name"] = t.track.name
 			trackProperties["preview_url"] = t.track.preview_url
 			trackProperties["duration_ms"] = t.track.duration_ms
+			trackProperties["duration_s"] = round(t.track.duration_ms / 1000, 0)
 			trackProperties["popularity"] = t.track.popularity
 			trackProperties["artist"] = stringifyArtists(t.track.artists)
 			tracks.append(trackProperties)
@@ -431,6 +433,7 @@ def retrieveAttributesOfSongsMostLikedByUserFromSpotify(token,time_range):
 				trackProperties["name"] = t.name
 				trackProperties["preview_url"] = t.preview_url
 				trackProperties["duration_ms"] = t.duration_ms
+				trackProperties["duration_s"] = round(t.duration_ms/1000,0)
 				trackProperties["popularity"] = t.popularity
 				trackProperties["artist"] = stringifyArtists(t.artists)
 				tracks.append(trackProperties)
@@ -455,7 +458,7 @@ def retrieveAttributesOfSongsMostLikedByUserFromSpotify(token,time_range):
 				tracks[c]["loudness"] = features[c].loudness
 				tracks[c]["speechiness"] = features[c].speechiness
 				tracks[c]["valence"] = features[c].valence
-				tracks[c]["tempo"] = features[c].tempo
+				tracks[c]["tempo"] = round(features[c].tempo,0)
 				tracks[c]["liveness"] = features[c].liveness
 
 				tracks[c]["funtorun"] = (features[c].energy + features[c].danceability) * 100 // 2
@@ -509,6 +512,13 @@ def app_factory() -> Flask:
 	app = Flask(__name__)
 	app.config['SECRET_KEY'] = 'aliens'
 
+
+	@app.route('/_homerun', methods=['GET', 'POST'])
+	def _homerun():
+				return render_template('_home-run.html')
+
+
+
 	@app.route('/', methods=['GET', 'POST'])
 	def main():
 		''' displays different templates: splash-dj.html if the user is not logged, home-dj.html when logged, playlist_created after a submit '''
@@ -526,7 +536,15 @@ def app_factory() -> Flask:
 		if token.is_expiring:
 			token = cred.refresh(token)
 			users[user] = token
-		return render_template("home-run.html")
+		if (request.args.get('mode', None) == "old") :
+			return render_template("home-run.html")
+
+		return redirect("/fe/index.html")
+#		elif (request.args.get('mode', None) == "old") :
+#			return render_template("home-run.html")
+#		else:
+#			return redirect('http://localhost:3000')
+		#return render_template("home-run.html")
 
 
 
@@ -561,6 +579,8 @@ def app_factory() -> Flask:
 		if uid is not None:
 			users.pop(uid, None)
 		return redirect('/', 307)
+
+
 
 	@app.route('/playlists', methods=['GET', 'POST'])
 	def playslists():
@@ -617,6 +637,55 @@ def app_factory() -> Flask:
 			logging.error(ex.response)
 		return page
 
+	@app.route('/playlistsx', methods=['GET', 'POST'])
+	def playslistsx():
+		try:
+			user = session.get('user', None)
+			token = users.get(user, None)
+			if token is None:
+				return jsonify({'message': 'Missing authemtication'}), 401
+			page=""
+			spotify = tk.Spotify(token)
+			username = spotify.current_user().display_name
+			userid = spotify.current_user().id
+			firstplaylists = spotify.playlists(userid)
+
+			myplaylists = spotify.all_items(firstplaylists)
+			_options = []
+			_plists_details = {}
+			_maxNumberOfTracks=0
+			xplaylists= []
+			for ct, p in enumerate(myplaylists):
+				_options.append((p.id, p.name))
+				_dictP = {
+					# "image": p.images[0].url,
+					"image": "",
+					"numberOfTracks": p.tracks.total,
+					"name": p.name,
+					"id": p.id
+
+				}
+				#logging.debug(p.id+"-"+p.name)
+				xplaylists.append(_dictP)
+				if (p.tracks.total > _maxNumberOfTracks):
+					_maxNumberOfTracks=p.tracks.total
+				_plists_details[p.id] = _dictP
+
+			return jsonify(xplaylists)
+		except tk.BadRequest as ex:
+			page += 'Error in retrieving data'
+			logging.error("Bad request retrieving home page playlists")
+			logging.error(str(ex))
+			logging.error(ex.request)
+			logging.error(ex.response)
+
+		except tk.HTTPError as ex:
+			page += 'Error in retrieving data'
+			logging.error("Http error retrieving home page playlists")
+			logging.error(str(ex))
+			logging.error(ex.request)
+			logging.error(ex.response)
+		return jsonify({'message': 'Internal Server Error'}), 500
 
 	@app.route('/playlistsongs', methods=['GET', 'POST'])
 	def playslistsongs():
@@ -638,6 +707,25 @@ def app_factory() -> Flask:
 
 	# return render_template('results.html', dynamicText="eccoci" + uid )
 	# return redirect('/', 307)
+
+
+	@app.route('/playlistx', methods=['GET', 'POST'])
+	def playslistx():
+		''' return json the songs contained in a playlist whose id is in the param list_id within the http request '''
+		user = session.get('user', None)
+		token = users.get(user, None)
+		if token is None:
+			return jsonify({'message': 'Missing authemtication'}), 401
+
+		if user is not None and request.values['list_id'] is not None:
+			_songs = retrieveAttributesOfSongsInAPlayslistFromSpotify(request.values['list_id'], token)
+			logging.debug(_songs)
+			lengthOfPlaylist = 0
+			for s in _songs:
+				lengthOfPlaylist = lengthOfPlaylist + s["duration_ms"]
+			lengthOfPlaylist = lengthOfPlaylist // 60000
+			# logging.debug("list_name"+request.values['list_name'])
+			return jsonify(_songs)
 
 	@app.route('/playlistrename', methods=['GET', 'POST'])
 	def playslistrename():
@@ -822,6 +910,69 @@ def app_factory() -> Flask:
 		return render_template('likedsongs.html', dynamicText="Here is a playlist sorted with increasing energy. If more than 10 songs have been found we saved the playlist -Fun2Run Lucky", l1Results=tracks,
 							   fNumberToColorRgb=numberToColorRgb)
 
+	@app.route('/feelluckyx', methods=['GET', 'POST'])
+	def feelluckyx():
+		''' displays to users the songs contained in a playlist whose id is in the param list_id within the http request '''
+		user = session.get('user', None)
+		token = users.get(user, None)
+		if token is None:
+			return jsonify({'message': 'Missing authemtication'}), 401
+
+		spotify = tk.Spotify(token)
+		# tracks = spotify.current_user_top_tracks(time_range='medium_term', limit=50, offset=0)
+		tracks = retrieveAttributesOfSongsMostLikedByUserFromSpotify(token,'medium_term')
+		tracks.sort(key=operator.itemgetter("energy"), reverse=False)
+		if len(tracks) > 30:
+			tracks=tracks[-30:]
+
+		return jsonify(tracks)
+
+	@app.route('/saveplaylistx', methods=['GET', 'POST'])
+	def saveplaylistx():
+		user = session.get('user', None)
+		token = users.get(user, None)
+		if token is None:
+			return jsonify({'message': 'Missing authemtication'}), 401
+
+		else:
+			postedData=request.json
+			logging.debug("postedData=")
+			logging.debug( postedData)
+			logging.debug(postedData["playlistName"])
+			logging.debug(postedData["list"])
+
+		res = savePlaylistToSpotify(postedData["playlistName"],"created with song2run",postedData["list"] ,token)
+		logging.debug(res)
+		if "error" not in res.lower():
+			return jsonify("ok")
+		else:
+			return jsonify({'message': 'Internal Server Error'}), 500
+#	@app.route('/fe/', methods=['GET', 'POST'])
+#	def reacthome():
+#		logging.debug("ooooo1")
+#		#return render_template('/build/index.html')
+#		return app.send_static_file('build/indextestarolo.html')
+	@app.route('/fe/cover.css', methods=['GET', 'POST'])
+	def customcss():
+		logging.debug("oooop1")
+		return app.send_static_file('css/cover-template/cover.css')
+
+
+	@app.route('/fe/static/css/<path:filename>')
+	def serve_css(filename):
+		logging.debug("ooooo2"+filename)
+		return send_from_directory('static/build/static/css/', filename)
+
+	@app.route('/fe/static/js/<path:filename>')
+	def serve_js(filename):
+		logging.debug("ooooo3"+filename)
+		return send_from_directory('static/build/static/js/', filename)
+
+	@app.route('/fe/<path:filename>')
+	def serve_staticroot(filename):
+		logging.debug("ooooo3"+filename)
+		return send_from_directory('static/build/', filename)
+
 
 	@app.route('/explore', methods=['GET', 'POST'])
 	def exlore():
@@ -937,7 +1088,6 @@ def app_factory() -> Flask:
 				logging.error(ex.response)
 
 			return page
-
 
 
 	return app

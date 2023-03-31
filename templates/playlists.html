@@ -26,6 +26,7 @@
         }
 
 
+
     </script>
     <!-- Bootstrap 5 CSS -->
     <link
@@ -171,6 +172,7 @@ ul.cloud a:hover::before {
   }
 }
 
+
     </style>
 
 
@@ -202,58 +204,76 @@ ul.cloud a:hover::before {
 
 
         <div class="row">
-      <div class="col-1">
-      </div>
+            <div class="col-1">
+            </div>
 
-       <div class="col-6">
-                 <h1>Pick one of your playlist and ..</h1>
-           <ul>
-               <li align="left"> build a new playlist with the songs to support your run. </li>
-               <li align="left"> Adjust the duration or split it in multiple playlists .</li>
-           </ul>
+            <div class="col-5">
+                <h1>Pick one of your playlist and ..</h1>
 
-       </div>
-        <div class="col-5">
-      <a  class="btn btn-lg btn-secondary fw-bold border-white bg-white"> <img src="/static/images/flaticon/cloth-64.png" alt="Squeeze" width="64" height="64"> &nbsp;&nbsp; Squeeze</a>
+            </div>
+            <div class="col-5">
+                <a class="btn btn-lg btn-secondary fw-bold border-grey bg-grey"> <img
+                        src="/static/images/flaticon/cloth-64.png" alt="Squeeze" width="64" height="64"> &nbsp;&nbsp;
+                    Squeeze</a>
+            </div>
+            <div class="col-1">
+            </div>
         </div>
+        <div class="row">
+            <div class="col-1">
+            </div>
+
+            <div class="col-10">
+
+                <ul>
+                    <li align="left"> build a new playlist with the songs to support your run.</li>
+                    <li align="left"> Adjust the duration or split it in multiple playlists .</li>
+                </ul>
+
+            </div>
+            <div class="col-1">
+            </div>
         </div>
 
+                <div class="row">
+            <div class="col-1">
+            </div>
 
-
-        <div style="margin-top: 5%">
+            <div class="col-10">
+                 <div style="margin-top: 5%">
             <form method="post">
 
-                        <ul class="cloud" role="navigation" aria-label="Webdev word cloud">
-                        {% for subfield in form.myLists %}
+                <ul class="cloud" role="navigation" aria-label="Webdev word cloud">
+                    {% for subfield in form.myLists %}
 
-                            <li>
+                    <li>
 
-                                {% set _max =maxNumberOfTracks %}
-                                {% set _x =playListsDetails[subfield.data].numberOfTracks %}
+                        {% set _max =maxNumberOfTracks %}
+                        {% set _x =playListsDetails[subfield.data].numberOfTracks %}
 
-                                {% if _x > 200 %}
-                                    {% set _x =200 %}
-                                {% endif %}
-                                {% if maxNumberOfTracks > 200 %}
-                                    {% set _max =200 %}
-                                {% endif %}
-                                {% set _weight =_x/_max %}
-                              <a onclick="myloadSongs('{{subfield.data}}','{{playListsDetails[subfield.data].name}}');"
-                                   data-bs-toggle="modal" data-bs-target="#exampleModal" data-weight="{{(_weight*10)|round|int}}">
-                                  {{subfield.label}}({{playListsDetails[subfield.data].numberOfTracks}})
-                              </a>
+                        {% if _x > 200 %}
+                        {% set _x =200 %}
+                        {% endif %}
+                        {% if maxNumberOfTracks > 200 %}
+                        {% set _max =200 %}
+                        {% endif %}
+                        {% set _weight =_x/_max %}
+                        <a onclick="myloadSongs('{{subfield.data}}','{{playListsDetails[subfield.data].name}}');"
+                           data-bs-toggle="modal" data-bs-target="#exampleModal"
+                           data-weight="{{(_weight*10)|round|int}}">
+                            {{subfield.label}}({{playListsDetails[subfield.data].numberOfTracks}})
+                        </a>
 
-                            </li>
+                    </li>
 
-                                <!--
-                                <a class="bi bi-three-dots" onclick="myloadSongs('{{subfield.data}}','{{playListsDetails[subfield.data].name}}');"
-                                   data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
-                                -->
+                    <!--
+                    <a class="bi bi-three-dots" onclick="myloadSongs('{{subfield.data}}','{{playListsDetails[subfield.data].name}}');"
+                       data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
+                    -->
 
 
-
-                        {% endfor %}
-                        </ul>
+                    {% endfor %}
+                </ul>
 
 
                 <!-- Modal -->
@@ -284,10 +304,19 @@ ul.cloud a:hover::before {
 
         </div>
 
+            </div>
+            <div class="col-1">
+            </div>
+        </div>
+
+
+
+
 
     </div>
 
-<a href="https://www.flaticon.com/free-icons/snail" title="snail icons">Snail icons created by Freepik - Flaticon</a>
+    <a href="https://www.flaticon.com/free-icons/snail" title="snail icons">Snail icons created by Freepik -
+        Flaticon</a>
 </div>
 
 
