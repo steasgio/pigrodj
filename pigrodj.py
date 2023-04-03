@@ -952,26 +952,33 @@ def app_factory() -> Flask:
 #		logging.debug("ooooo1")
 #		#return render_template('/build/index.html')
 #		return app.send_static_file('build/indextestarolo.html')
+
+	@app.route('/static/media/<path:filename>')
+	def serve_staticreactreferences(filename):
+		logging.debug("ooooo3"+filename)
+		return send_from_directory('static/build/static/media/', filename)
+
 	@app.route('/fe/cover.css', methods=['GET', 'POST'])
 	def customcss():
-		logging.debug("oooop1")
+		#logging.debug("oooop1")
 		return app.send_static_file('css/cover-template/cover.css')
 
 
 	@app.route('/fe/static/css/<path:filename>')
 	def serve_css(filename):
-		logging.debug("ooooo2"+filename)
+		#logging.debug("ooooo2"+filename)
 		return send_from_directory('static/build/static/css/', filename)
 
 	@app.route('/fe/static/js/<path:filename>')
 	def serve_js(filename):
-		logging.debug("ooooo3"+filename)
+		#logging.debug("ooooo3"+filename)
 		return send_from_directory('static/build/static/js/', filename)
 
 	@app.route('/fe/<path:filename>')
 	def serve_staticroot(filename):
-		logging.debug("ooooo3"+filename)
+		#logging.debug("ooooo3"+filename)
 		return send_from_directory('static/build/', filename)
+
 
 
 	@app.route('/explore', methods=['GET', 'POST'])
