@@ -64,7 +64,33 @@
 
 
         </p>
+    <!-- Privacy policy popup code -->
+    <div id="privacy-policy-popup" style="display:none">
+    {% include "_privacy_policy.htm" %}
+        {% include "_enduser_agreement.htm" %}
+         <button onclick="acceptPrivacyPolicy()">I accept the terms</button>
+    </div>
+    <script>
+      var privacyAccepted = false; // Declare the boolean variable and initialize it to false
 
+      function showPrivacyPolicyPopup() {
+        var popup = document.getElementById("privacy-policy-popup");
+        popup.style.display = "block";
+      }
+
+      function acceptPrivacyPolicy() {
+        privacyAccepted = true; // Set the boolean variable to true when the user accepts the privacy policy
+        // Add your code here to save the user's acceptance of the privacy policy and allow them to continue using your website
+        alert("Thank you for accepting our privacy policy. You can now continue using our website.");
+        var popup = document.getElementById("privacy-policy-popup");
+        popup.style.display = "none";
+      }
+
+      // Show the privacy policy popup when the page loads
+      window.onload = function() {
+        showPrivacyPolicyPopup();
+      };
+    </script>
 
         <br/>
         <br/>
@@ -83,12 +109,15 @@
             <a href="/login" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Log in on Spotify</a>
         </p>
 
+
+
     </main>
 
 
     <footer class="mt-auto text-white-50">
-        <p> <a href="https://getbootstrap.com/" class="text-white">Credits</a>, by <a
-                href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
+
+        Song2run.com is Copyright © 2023. All Rights Reserved. Song2run.com uses the Spotify Platform API to display content copyrighted by external entities. Song2run.com is not associated with Spotify, Apple, or Apple Music. By using this site, you agree to the <a href="" class="text-white"> Song2run.com Copyright, Credits, Terms of Use, Privacy Policy, and Cookie Use Policy.</a>
+        </p>
     </footer>
 </div>
 
