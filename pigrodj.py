@@ -1098,7 +1098,10 @@ def app_factory() -> Flask:
 
 			return page
 
-
+	# Define your default route to redirect to home page
+	@app.route('/<path:path>')
+	def redirect_to_home(path):
+		return redirect("/")
 	return app
 
 
