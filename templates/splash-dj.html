@@ -66,10 +66,13 @@
         </p>
     <!-- Privacy policy popup code -->
     <div id="privacy-policy-popup" style="display:none">
-    {% include "_privacy_policy.htm" %}
+          <div style="background-color:#fff; color:black; padding:20px; border-radius:10px; max-width:600px; max-height:200px; overflow:auto;" align="left">
         {% include "_enduser_agreement.htm" %}
+
+          </div>
          <button onclick="acceptPrivacyPolicy()">I accept the terms</button>
     </div>
+
     <script>
       var privacyAccepted = false; // Declare the boolean variable and initialize it to false
 
@@ -81,7 +84,7 @@
       function acceptPrivacyPolicy() {
         privacyAccepted = true; // Set the boolean variable to true when the user accepts the privacy policy
         // Add your code here to save the user's acceptance of the privacy policy and allow them to continue using your website
-        alert("Thank you for accepting our privacy policy. You can now continue using our website.");
+        //alert("Thank you for accepting our privacy policy. You can now continue using our website.");
         var popup = document.getElementById("privacy-policy-popup");
         popup.style.display = "none";
       }
@@ -90,6 +93,8 @@
       window.onload = function() {
         showPrivacyPolicyPopup();
       };
+
+
     </script>
 
         <br/>
@@ -103,11 +108,15 @@
         </p>
 
         <p class="lead">
-            <br/>
+
              Login to Spotify is needed to retrieve the songs you like from your playlists and to save the newly created playlists.
             <br/><br/>
-            <a href="/login" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Log in on Spotify</a>
+            <a href="/login" onclick="if(!privacyAccepted){alert('Please accept terms and conditions'); return false;} else {}"><img src="/static/images/spotifylogin.png" alt="Log in with Spotify" /></a>
+
+                    <br/>
+        <br/>
         </p>
+
 
 
 
@@ -116,8 +125,8 @@
 
     <footer class="mt-auto text-white-50">
 
-        Song2run.com is Copyright © 2023. All Rights Reserved. Song2run.com uses the Spotify Platform API to display content copyrighted by external entities. Song2run.com is not associated with Spotify, Apple, or Apple Music. By using this site, you agree to the <a href="" class="text-white"> Song2run.com Copyright, Credits, Terms of Use, Privacy Policy, and Cookie Use Policy.</a>
-        </p>
+        Song2run.com is Copyright © 2023. All Rights Reserved. Song2run.com uses the Spotify Platform API to display content copyrighted by external entities. Song2run.com is not associated with Spotify, Apple, or Apple Music. By using this site, you agree to the <a href="/enduseragreement.htm" class="text-white"> Song2run.com Copyright, Credits, Terms of Use, Privacy Policy, and Cookie Use Policy.</a>
+
     </footer>
 </div>
 

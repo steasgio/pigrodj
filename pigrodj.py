@@ -979,7 +979,9 @@ def app_factory() -> Flask:
 		#logging.debug("ooooo3"+filename)
 		return send_from_directory('static/build/', filename)
 
-
+	@app.route('/enduseragreement.htm', methods=['GET', 'POST'])
+	def enduseragreement():
+		return render_template('enduseragreement.html');
 
 	@app.route('/explore', methods=['GET', 'POST'])
 	def exlore():
