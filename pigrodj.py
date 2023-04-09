@@ -422,7 +422,7 @@ def retrieveAttributesOfSongsMostLikedByUserFromSpotify(token,time_range):
 		for i in range(4):
 			logging.debug("in cycle "+str(50*i))
 			p = spotify.current_user_top_tracks(time_range=time_range, limit=200, offset=48*i)
-			spotify.playback_currently_playing()
+			#spotify.playback_currently_playing()
 			pp = spotify.all_items(p)
 
 			for t in pp:
@@ -554,7 +554,8 @@ def app_factory() -> Flask:
 			return redirect('/', 307)
 
 		# scope = tk.scope.user_read_currently_playing
-		scope = tk.scope.every
+		# working !! scope = tk.scope.every
+		scope=tk.scope.playlist_modify_private+tk.scope.playlist_read_private+tk.scope.playlist_modify_public+tk.scope.user_top_read+tk.scope.user_read_recently_played+tk.scope.user_library_modify+tk.scope.user_library_modify
 		auth = tk.UserAuth(cred, scope)
 		auths[auth.state] = auth
 		return redirect(auth.url, 307)
